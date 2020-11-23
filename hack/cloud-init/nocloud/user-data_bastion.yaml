@@ -1,0 +1,44 @@
+#cloud-config
+# https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+
+# Set the locale
+locale: en_US.UTF-8
+
+# Set the timezone for this instance
+timezone: UTC
+
+# Do not recreate server ssh keys
+ssh_deletekeys: False
+
+# Docker CentOS Installation
+yum_repos:
+  docker:
+    name: Docker Engine Repository
+    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    gpgcheck: true
+    enabled: True
+
+# Additional packages to be installed
+package_update: True
+packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+# apt:
+#   sources:
+#     docker.list:
+#       source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
+#       # curl -sL https://download.docker.com/linux/ubuntu/gpg | gpg
+#       keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+# packages:
+#   - apt-transport-https
+#   - ca-certificates
+#   - curl
+#   - gnupg-agen
+#   - software-properties-common
+#   - docker-ce
+#   - docker-ce-cli
+#   - containerd.io

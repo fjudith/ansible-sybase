@@ -1,0 +1,33 @@
+---
+- name: bastion
+  hostname: bastion.local
+  description: Bastion server
+  box: centos/7
+  cpus: 1
+  memory: 1024
+  ssh_port: 52222
+  provision:
+    meta-data: ../cloud-init/nocloud/meta-data.yaml
+    user-data: ../cloud-init/nocloud/user-data_bastion.yaml
+    cloud-init: ./scripts/cloud-init.sh
+
+- name: database
+  hostname: database.local
+  description: Database server
+  box: centos/7
+  cpus: 2
+  memory: 2048
+  provision:
+    meta-data: ../cloud-init/nocloud/meta-data.yaml
+    user-data: ../cloud-init/nocloud/user-data_database.yaml
+    cloud-init: ./scripts/cloud-init.sh
+  packages:
+    - ./packages/ASE_Suite.linuxamd64.tgz
+  files:
+    - ./files/sysctl.conf
+    - ./files/interfaces
+    - ./files/sybase-ase.rs
+    - ./files/sybase-response.conf
+  scripts:
+    - ./scripts/start-sybase.sh
+  install: ./scripts/install-sybase.sh

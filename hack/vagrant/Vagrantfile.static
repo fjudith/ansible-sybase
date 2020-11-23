@@ -1,0 +1,72 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'yaml'
+
+# get details of boxes to build
+boxes = YAML.load_file('./boxes.yaml')
+
+# API version
+VAGRANTFILE_API_VERSION = 2
+DEFAULT_BASE_BOX = 'centos/7'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    # Bastion
+    config.vm.define 'bastion' do |bastion|
+        bastion.vm.box = DEFAULT_BASE_BOX
+        bastion.vm.hostname = "bastion"
+
+        # SSH Forwarding
+        bastion.vm.network :forwarded_port, guest: 22, host: 52222, host_ip: '127.0.0.1', id: 'ssh'
+
+        # Shared folders
+        bastion.vm.synced_folder '.', '/vagrant', disabled: true
+
+        bastion.vm.provider 'virtualbox' do |vb|
+            vb.customize ['modifyvm', :id, '--cpus', 1]
+            vb.customize ['modifyvm', :id, '--memory', 1024]
+            vb.customize ['modifyvm', :id, '--name', 'bastion']
+            vb.customize ['modifyvm', :id, '--description', 'Bastion host']
+        end
+
+        # Cloud-Config
+        bastion.vm.cloud_init do |cloud_init|
+            cloud_init.content_type = "text/cloud-config"
+            cloud_init.path = "../cloud-init/nocloud/user-data_bastion.yaml"
+        end
+    end
+
+    # Database
+    config.vm.define 'database' do |database|
+        database.vm.box = DEFAULT_BASE_BOX
+        database.vm.hostname = "database"
+
+        # Sybase Forwarding
+        database.vm.network :forwarded_port, guest: 5000, host: 5000, host_ip: '127.0.0.1', id: 'sybase'
+
+        # Shared folders
+        database.vm.synced_folder '.', '/vagrant', disabled: true
+
+        database.vm.provider 'virtualbox' do |vb|
+            vb.customize ['modifyvm', :id, '--cpus', 2]
+            vb.customize ['modifyvm', :id, '--memory', 2048]
+            vb.customize ['modifyvm', :id, '--name', 'database']
+            vb.customize ['modifyvm', :id, '--description', 'SAP Adaptive Server Enterprise (ASE) host']
+        end
+
+        # Cloud-Config
+        database.vm.cloud_init do |cloud_init|
+            cloud_init.content_type = "text/cloud-config"
+            cloud_init.path = "../cloud-init/nocloud/user-data_database.yaml"
+        end
+
+        # Sybase installation
+        database.vm.provision :file, :source => './scripts/install-sybase.sh', :destination => '/tmp/install-sybase.sh'
+        database.vm.provision :file, :source => './files/sysctl.conf', :destination => '/tmp/nocloud/sysctl.conf'
+        database.vm.provision :file, :source => './files/interfaces', :destination => '/tmp/interfaces'
+        database.vm.provision :file, :source => './files/sybase-ase.rs', :destination => '/tmp/sybase-ase.rs'
+        database.vm.provision :file, :source => './files/sybase-response.conf', :destination => '/tmp/sybase-response.conf'
+        database.vm.provision :file, :source => './scripts/start-sybase.sh', :destination => '/tmp/start-sybase.sh'
+        database.vm.provision :shell, :path => './scripts/install-sybase.sh'
+    end
+end

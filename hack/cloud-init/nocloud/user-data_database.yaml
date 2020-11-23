@@ -1,0 +1,17 @@
+#cloud-config
+# https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+
+# Set the locale
+locale: en_US.UTF-8
+
+# Set the timezone for this instance
+timezone: UTC
+
+# Do not recreate server ssh keys
+ssh_deletekeys: False
+
+# Additional packages to be installed
+package_update: True
+packages:
+  - wget
+  - curl
