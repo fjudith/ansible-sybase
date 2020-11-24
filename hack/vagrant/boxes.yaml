@@ -16,7 +16,7 @@
   description: Database server
   box: centos/7
   cpus: 2
-  memory: 2048
+  memory: 3072
   provision:
     meta-data: ../cloud-init/nocloud/meta-data.yaml
     user-data: ../cloud-init/nocloud/user-data_database.yaml
@@ -28,6 +28,8 @@
     - ./files/interfaces
     - ./files/sybase-ase.rs
     - ./files/sybase-response.conf
+    - ./files/sybase.service
   scripts:
-    - ./scripts/start-sybase.sh
-  install: ./scripts/install-sybase.sh
+    - ./scripts/start-server.sh
+    - ./scripts/stop-server.sh
+  install: ./scripts/install-ASE.sh
