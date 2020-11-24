@@ -22,9 +22,20 @@ yum_repos:
 # Additional packages to be installed
 package_update: True
 packages:
+  - nano
+  - vim
+  - python3
+  - python3-pip
+  - python3-setuptools
   - docker-ce
   - docker-ce-cli
   - containerd.io
+
+
+runcmd:
+  # Start Docker
+  - [/usr/bin/systemctl, enable, docker.service]
+  - [/usr/bin/systemctl, start, docker.service]
 
 # apt:
 #   sources:

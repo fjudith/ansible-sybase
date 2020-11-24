@@ -1,6 +1,17 @@
 #cloud-config
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 
+# Create Groups
+groups:
+  - sybase
+
+# Create Users
+users:
+  - name: sybase
+    geos: SAP Adaptive Server Enterprise user
+    primary_group: sybase
+    groups: root
+
 # Set the locale
 locale: en_US.UTF-8
 
@@ -13,5 +24,10 @@ ssh_deletekeys: False
 # Additional packages to be installed
 package_update: True
 packages:
+  - nano
+  - vim
   - wget
-  - curl
+  - gtk2
+  - libaio
+  - glibc
+  - glibc.686
