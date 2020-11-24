@@ -1,0 +1,7 @@
+bastion:
+  hosts:
+    ansible_host: 172.
+    ansible_port: 52222
+  vars:
+    ansible_user: vagrant
+    ansible_ssh_private_key_file: hack/vagrant/.vagrant/machines/bastion/virtualbox/private_key
