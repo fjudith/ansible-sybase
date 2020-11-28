@@ -2,14 +2,12 @@
 
 set -e
 
-SA_PASSWORD=${SA_PASSWORD:="myPassword"}
-
 export SYBASE="/home/sybase"
 
 export PATH=${PATH}:${SYBASE}/ASE-16_0/bin/:${SYBASE}/OCS-16_0/bin
 
-cp /tmp/sysctl.conf /etc/sysctl.conf && \
-/sbin/sysctl -p
+# cp /tmp/sysctl.conf /etc/sysctl.conf && \
+# /sbin/sysctl -p
 
 # libaio
 # echo "Install libaio" && \
@@ -39,48 +37,14 @@ mkdir -p /tmp/ && \
 tar xfz /tmp/ASE_Suite.linuxamd64.tgz -C /tmp/ && \
 rm -rf /tmp/ASE_Suite.linuxamd64.tgz
 
-# Install Sybase
-echo "Install SAP ASE" && \
-/tmp/ASE_Suite/setup.bin -f /tmp/sybase-ase-response.conf \
+# Install Sybase Open Client and librairies
+echo "Install SAP OCS" && \
+chown -R sybase:sybase ${SYBASE}/ && \
+echo "source ${SYBASE}/SYBASE.sh" | tee -a ${SYBASE}/.bashrc && \
+/tmp/ASE_Suite/setup.bin -f /tmp/sybase-ocs-response.conf \
 -i silent \
 -DAGREE_TO_SAP_LICENSE=true \
 -DRUN_SILENT=true
-
-# Copy resource file
-echo "Replace resource file" && \
-cp /tmp/sybase-ase.rs ${SYBASE}/ASE-16_0/sybase-ase.rs
-
-# Build ASE server
-echo "Build MYSYBASE server" && \
-source ${SYBASE}/SYBASE.sh && \
-${SYBASE}/ASE-16_0/bin/srvbuildres -r ${SYBASE}/ASE-16_0/sybase-ase.rs
-
-# Change the Sybase interface
-echo "Update SAP ASE  listen interfaces" && \
-mv ${SYBASE}/interfaces ${SYBASE}/interfaces.backup && \
-cp /tmp/interfaces ${SYBASE}/
-
-# Set the Sybase start/stop scripts
-echo "Install stop/start scripts" && \
-mkdir -p ${SYBASE}/bin && \
-cp /tmp/start-server.sh ${SYBASE}/bin/ && \
-chmod +x ${SYBASE}/bin/start-server.sh && \
-cp /tmp/stop-server.sh ${SYBASE}/bin/ && \
-chmod +x ${SYBASE}/bin/stop-server.sh && \
-
-# Kill running processes
-/usr/bin/pkill -TERM --echo dataserver
-
-# Enable Sybase Service
-echo "Install systemd service"
-echo "myPassword" | tee ${SYBASE}/.sa_password && \
-echo "source ${SYBASE}/SYBASE.sh" | tee -a ${SYBASE}/.bashrc && \
-chown -R sybase:sybase ${SYBASE}/ && \
-cp /tmp/sybase.service /etc/systemd/system/sybase.service && \
-systemctl enable sybase.service && \
-systemctl start sybase
-
-# Stop password
 
 # Remove ASE installation files
 rm -vrf /tmp/ASE_Suite
