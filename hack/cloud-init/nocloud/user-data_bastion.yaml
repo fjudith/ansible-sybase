@@ -1,6 +1,18 @@
 #cloud-config
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 
+# Create Groups
+groups:
+  - sybase
+
+# Create Users
+users:
+  - name: sybase
+    geos: SAP Adaptive Server Enterprise user
+    primary_group: sybase
+    groups: root
+    sudo: ALL=(ALL) ALL
+
 # Set the locale
 locale: en_US.UTF-8
 
@@ -24,9 +36,43 @@ package_update: True
 packages:
   - nano
   - vim
+  - wget
+  - curl
+  # 32-bit libraries for isql
+  # - compat-libstdc++-33-3.2.3-72.el7.x86_64
+  # - glibc-2.17-106.el7_2.6.i686
+  # - libXtst-devel
+  # - libXtst-devel
+  # - libXi-devel
+  # - openmotif-devel
+  # - libXmu-devel
+  # - libXt-devel
+  # - libXext-devel
+  # - libXp-devel
+  # - libX11-devel
+  # - libSM-devel
+  # - libICE-devel
+  # - libaio
+  - gtk2
+  - libaio
+  - glibc
+  - glibc-devel
+  - glibc.i686
+  - glibc-devel.i686
+  - libstdc++-devel
+  - libstdc++-devel.i686
+  - libgcc
+  - libgcc.i686
+  # FreeTDS
+  - unixODBC
+  - unixODBC-devel
+  - freetds
+  - freetds-devel
+  # Python 3
   - python3
   - python3-pip
   - python3-setuptools
+  # Docker engine
   - docker-ce
   - docker-ce-cli
   - containerd.io
