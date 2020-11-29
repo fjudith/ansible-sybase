@@ -1,0 +1,4 @@
+- hosts: bastion
+  gather_facts: false
+  roles:
+    - sap_ocs

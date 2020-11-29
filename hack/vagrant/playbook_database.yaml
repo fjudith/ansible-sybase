@@ -1,0 +1,4 @@
+- hosts: database
+  gather_facts: false
+  roles:
+    - sap_ase

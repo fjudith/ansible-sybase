@@ -1,35 +1,58 @@
 ---
+- name: database
+  hostname: database.local
+  description: Sybase Database server
+  box: centos/7
+  box_version: "2004.01"
+  cpus: 2
+  memory: 2048
+  ssh_port: 42222
+  forward_port:
+    - name: ssh
+      port: 22
+      expose: 42222
+  provision:
+    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud/user-data_database.yaml
+    cloud-init: ./hack/scripts/cloud-init.sh
+  packages:
+    - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
+  files:
+    - ./hack/vagrant/files/sysctl.conf
+    - ./hack/vagrant/files/interfaces
+    - ./hack/vagrant/files/sybase-ase.rs
+    - ./hack/vagrant/files/sybase-ase-response.conf
+    - ./hack/vagrant/files/sybase.service
+  scripts:
+    - ./hack/vagrant/scripts/start-server.sh
+    - ./hack/vagrant/scripts/stop-server.sh
+  install: ./hack/vagrant/scripts/install-ASE.sh
+  ansible:
+    playbook: hack/vagrant/playbook_database.yaml
+
 - name: bastion
   hostname: bastion.local
   description: Bastion server
   box: centos/7
+  box_version: "2004.01"
   cpus: 1
   memory: 1024
   ssh_port: 52222
   provision:
-    meta-data: ../cloud-init/nocloud/meta-data.yaml
-    user-data: ../cloud-init/nocloud/user-data_bastion.yaml
-    cloud-init: ./scripts/cloud-init.sh
-
-- name: database
-  hostname: database.local
-  description: Database server
-  box: centos/7
-  cpus: 2
-  memory: 3072
-  provision:
-    meta-data: ../cloud-init/nocloud/meta-data.yaml
-    user-data: ../cloud-init/nocloud/user-data_database.yaml
-    cloud-init: ./scripts/cloud-init.sh
+    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud/user-data_bastion.yaml
+    cloud-init: ./hack/scripts/cloud-init.sh
   packages:
-    - ./packages/ASE_Suite.linuxamd64.tgz
+    - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
   files:
-    - ./files/sysctl.conf
-    - ./files/interfaces
-    - ./files/sybase-ase.rs
-    - ./files/sybase-response.conf
-    - ./files/sybase.service
-  scripts:
-    - ./scripts/start-server.sh
-    - ./scripts/stop-server.sh
-  install: ./scripts/install-ASE.sh
+    - ./hack/vagrant/files/sybase-ocs-response.conf
+  install: ./hack/vagrant/scripts/install-OCS.sh
+  forward_port:
+    - name: ssh
+      port: 22
+      expose: 52222
+    - name: sybase
+      port: 5000
+      expose: 5000
+  ansible:
+    playbook: hack/vagrant/playbook_bastion.yaml
