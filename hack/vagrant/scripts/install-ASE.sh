@@ -69,7 +69,7 @@ cp /tmp/stop-server.sh ${SYBASE}/bin/ && \
 chmod +x ${SYBASE}/bin/stop-server.sh && \
 
 # Kill running processes
-/usr/bin/pkill -TERM --echo dataserver
+sudo /usr/bin/pkill --echo dataserver
 
 # Enable Sybase Service
 echo "Install systemd service"
@@ -78,7 +78,7 @@ echo "source ${SYBASE}/SYBASE.sh" | tee -a ${SYBASE}/.bashrc && \
 chown -R sybase:sybase ${SYBASE}/ && \
 cp /tmp/sybase.service /etc/systemd/system/sybase.service && \
 systemctl enable sybase.service && \
-systemctl start sybase
+systemctl start sybase.service
 
 # Stop password
 
