@@ -1,0 +1,21 @@
+- name: Download Sybase installation package
+  get_url:
+    url: "{{ sybase.install.archive_url }}"
+    dest: /tmp/ASE_Suite.linuxamd64.tgz
+    mode: '0440'
+    checksum: "{{ install.archive_sha256 }}"
+
+- name: Extract Sybase intallation package
+  unarchive:
+    src: /tmp/ASE_Suite.linuxamd64.tgz
+    dest: "/tmp/"
+
+- name: Create Sybase installation response file
+  template: 
+    src: sybase-ase-response.conf.j2
+    dest: /tmp/sybase-ase-response.conf
+
+- name: Create Sybase installation resource file
+  template:
+    src: sybase-ase.rs.j2
+    dest: /tmp/sybase-ase.rs

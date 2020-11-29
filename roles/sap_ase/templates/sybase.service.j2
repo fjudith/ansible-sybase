@@ -1,0 +1,13 @@
+[Unit]
+Description=Sybase dataserver
+Wants=network-online.target
+After=network-online.target firewalld.service
+
+[Service]
+User=sybase
+EnvironmentFile={{ sybase.install.directory }}/SYBASE.env
+ExecStart={{ sybase.install.directory }}/bin/start-server.sh {{ sybase.networking.name }}
+ExecStop={{ sybase.install.directory }}/bin/stop-server.sh {{ sybase.networking.name }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+{{ sybase.networking.name }}
+	master tcp ether {{ sybase.networking.interface }} {{ sybase.networking.port }}
+	query tcp ether 127.0.0.1 {{ sybase.networking.port }}
+
+{{ sybase.networking.name }}_BS
+	master tcp ether {{ sybase.networking.interface }} {{ sybase.networking.backup_port }}
+	query tcp ether 127.0.0.1 {{ sybase.networking.backup_port }}

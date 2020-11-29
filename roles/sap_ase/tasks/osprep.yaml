@@ -1,0 +1,17 @@
+- name: Disable address space layout randomization (ASLR)
+  sysctl:
+    name:  kernel.randomize_va_space
+    value: '0'
+    state: present
+
+- name: Disable IPv6
+  sysctl:
+    name: net.ipv6.conf.all.disable_ipv6
+    value: '1'
+
+- name: Add 'sybase' user
+  user:
+    name: "{{ sybase.user }}"
+    group: "{{ sybase.user }}"
+    create_home: 'yes'
+    

@@ -1,0 +1,52 @@
+- name: Install Sybase
+  command: >-
+    /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ase-response.conf
+    -i silent
+    -DAGREE_TO_SAP_LICENSE=true
+    -DRUN_SILENT=true
+
+- name: Build Sybase server
+  shell: >-
+    source {{ sybase.install.directory }}/SYBASE.sh &&
+    {{ sybase.install.directory }}/ASE-16_0/bin/srvbuildres -r {{ sybase.install.directory }}/tmp/sybase-ase.rs
+
+- name: Configure Sybase interfaces
+  template:
+    src: interfaces.j2
+    dest: "{{ sybase.install.directory }}/interfaces"
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: '0440'
+
+- name: Copy Sybase startup script
+  template:
+    src: start-server.sh.j2
+    dest: "{{ sybase.install.directory }}/bin/start-server.sh"
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: '0750'
+
+- name: Copy Sybase stop script
+  template:
+    src: stop-server.sh.j2
+    dest: "{{ sybase.install.directory }}/bin/stop-server.sh"
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: '0750'
+
+- name: Install Sybase Systemd service
+  template:
+    src: sybase.service.j2
+    dest: /etc/systemd/system/sybase.service
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create SA password file
+  copy:
+    dest: "{{ sybase.install.directory }}/.sa_password"
+    content: |
+      {{ sybase.sa_password }}
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: '0400'
