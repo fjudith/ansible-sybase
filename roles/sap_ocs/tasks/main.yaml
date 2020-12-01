@@ -1,0 +1,8 @@
+- name: ASE | OS preparation
+  import_tasks: osprep.yaml
+
+- name: ASE | Configure
+  import_tasks: config.yaml
+
+- name: ASE | Install
+  import_tasks: install.yaml

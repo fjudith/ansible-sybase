@@ -1,0 +1,27 @@
+- name: Check if Sybase already installed
+  stat:
+    path: "{{ sybase.install.client.directory }}/SYBASE.sh"
+  register: sybase_install
+
+- name: Install Sybase
+  command: >-
+    /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ocs-response.conf
+    -i silent
+    -DAGREE_TO_SAP_LICENSE=true
+    -DRUN_SILENT=true
+  when: not sybase_install.stat.exists
+
+- name: Configure Sybase interfaces
+  template:
+    src: interfaces.j2
+    dest: "{{ sybase.install.client.directory }}/interfaces"
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: 0440
+
+- name: Update .bashrc
+  become: true
+  become_user: "{{ sybase.user }}"
+  lineinfile:
+    path: "{{ sybase.install.client.directory }}/.bashrc"
+    line: "source {{ sybase.install.client.directory }}/SYBASE.sh"
