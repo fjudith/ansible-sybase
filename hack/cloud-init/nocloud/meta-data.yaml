@@ -1,2 +1,5 @@
 instance-id: 0001
-local-hostname: localhost
+machine: x86_64
+platform: nocloud
+region: localhost
+availability-zone: null
