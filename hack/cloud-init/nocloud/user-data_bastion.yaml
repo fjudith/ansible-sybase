@@ -79,6 +79,8 @@ packages:
 
 
 runcmd:
+  # Install Ansible
+  - [/usr/bin/pip3, install, ansible==2.9]
   # Start Docker
   - [/usr/bin/systemctl, enable, docker.service]
   - [/usr/bin/systemctl, start, docker.service]

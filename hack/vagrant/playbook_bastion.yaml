@@ -2,3 +2,4 @@
   gather_facts: false
   roles:
     - sap_ocs
+    - liquidbase

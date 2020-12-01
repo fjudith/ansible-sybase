@@ -54,8 +54,11 @@ packages:
   - libstdc++-devel.i686
   - libgcc
   - libgcc.i686
+  # Python 3
+  - python3
+  - python3-pip
+  - python3-setuptools
 
 runcmd:
-  # Start Docker
-  - [/usr/bin/systemctl, enable, docker.service]
-  - [/usr/bin/systemctl, start, docker.service]
+  # Install Ansible
+  - [/usr/bin/pip3, install, ansible==2.9]

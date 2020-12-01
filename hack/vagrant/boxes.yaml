@@ -14,7 +14,7 @@
   provision:
     meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
     user-data: ./hack/cloud-init/nocloud/user-data_database.yaml
-    cloud-init: ./hack/scripts/cloud-init.sh
+    cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   packages:
     - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
   files:
@@ -28,7 +28,7 @@
     - ./hack/vagrant/scripts/stop-server.sh
   install: ./hack/vagrant/scripts/install-ASE.sh
   ansible:
-    playbook: hack/vagrant/playbook_database.yaml
+    playbook: ./hack/vagrant/playbook_database.yaml
 
 - name: bastion
   hostname: bastion.local
@@ -41,7 +41,7 @@
   provision:
     meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
     user-data: ./hack/cloud-init/nocloud/user-data_bastion.yaml
-    cloud-init: ./hack/scripts/cloud-init.sh
+    cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   packages:
     - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
   files:
@@ -55,4 +55,4 @@
       port: 5000
       expose: 5000
   ansible:
-    playbook: hack/vagrant/playbook_bastion.yaml
+    playbook: ./hack/vagrant/playbook_bastion.yaml
