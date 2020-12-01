@@ -1,9 +1,23 @@
+- name: Check if Sybase installation package synced using Vagrant
+  stat:
+    path: "{{ sybase.install.server.archive_vagrant }}"
+  register: archive_vagrant
+
+- name: Symlink Vagrant installation package in '/tmp'
+  file:
+    src: "{{ sybase.install.server.archive_vagrant }}"
+    dest: /tmp/ASE_Suite.linuxamd64.tgz
+    state: link
+  when: archive_vagrant.stat.exists
+
 - name: Download Sybase installation package
   get_url:
-    url: "{{ sybase.install.archive_url }}"
+    url: "{{ sybase.install.server.archive_url }}"
     dest: /tmp/ASE_Suite.linuxamd64.tgz
-    mode: '0440'
-    checksum: "{{ install.archive_sha256 }}"
+    mode: 0444
+    checksum: "{{ sybase.install.server.archive_checksum }}"
+  register: archive_url
+  when: not archive_vagrant.stat.exists
 
 - name: Extract Sybase intallation package
   unarchive:
@@ -11,11 +25,13 @@
     dest: "/tmp/"
 
 - name: Create Sybase installation response file
-  template: 
+  template:
     src: sybase-ase-response.conf.j2
     dest: /tmp/sybase-ase-response.conf
+    mode: 0440
 
 - name: Create Sybase installation resource file
   template:
     src: sybase-ase.rs.j2
     dest: /tmp/sybase-ase.rs
+    mode: 0440

@@ -5,11 +5,11 @@
 
 #Validate Response File
 #----------------------
-RUN_SILENT={{ sybase.install.silent }}
+RUN_SILENT={{ sybase.install.server.silent }}
 
 #Choose Install Folder
 #---------------------
-USER_INSTALL_DIR={{ sybase.install.directory }}
+USER_INSTALL_DIR={{ sybase.install.server.directory }}
 
 #Choose Update Install Option
 #----------------------------
@@ -17,8 +17,8 @@ DO_UPDATE_INSTALL=false
 
 #Choose Install Set
 #------------------
-CHOSEN_FEATURE_LIST={{ sybase.install.features }}
-CHOSEN_INSTALL_FEATURE_LIST={{ sybase.install.features }}
+CHOSEN_FEATURE_LIST={{ sybase.install.server.features }}
+CHOSEN_INSTALL_FEATURE_LIST={{ sybase.install.server.features }}
 CHOSEN_INSTALL_SET=Custom
 
 #Choose Product License Type

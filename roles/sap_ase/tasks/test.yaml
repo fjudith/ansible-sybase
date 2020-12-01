@@ -1,0 +1,10 @@
+- name: Test Local Sybase server access
+  shell: 
+    cmd: |
+      source {{ sybase.install.server.directory }}/SYBASE.sh && \
+      isql -U sa -P {{ sybase.sa_password }} -S {{ sybase.networking.name }} {{ sybase.install.server.directory }}/tmp/sybase-ase.rs << EOF
+      select @@version
+      go
+      EOF
+  args:
+    executable: /binbash

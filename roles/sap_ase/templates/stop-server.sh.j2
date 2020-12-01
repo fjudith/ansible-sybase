@@ -4,7 +4,7 @@
 
 _server=${1}
 
-source {{ sybase.install.directory }}/SYBASE.sh
+source {{ sybase.install.server.directory }}/SYBASE.sh
 
 _isql=${SYBROOT}/${SYBASE_OCS}/bin/isql
 
@@ -12,7 +12,7 @@ if [ -x ${_isql} ]
 then
   echo "Stopping Sybase server .... ${_server}"
   ${_isql} -U sa -S ${_server} << EOF
-$( cat {{ sybase.install.directory }}/.sa_password )
+$( cat {{ sybase.install.server.directory }}/.sa_password )
 shutdown
 go
 EOF

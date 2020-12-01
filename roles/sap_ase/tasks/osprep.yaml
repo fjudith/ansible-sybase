@@ -9,9 +9,13 @@
     name: net.ipv6.conf.all.disable_ipv6
     value: '1'
 
+- name: Increase Kernel shared memory
+  sysctl:
+    name: kernel.shmmax
+    value: "{{ sybase.install.server.kernel_shmmax }}"
+
 - name: Add 'sybase' user
   user:
     name: "{{ sybase.user }}"
     group: "{{ sybase.user }}"
     create_home: 'yes'
-    

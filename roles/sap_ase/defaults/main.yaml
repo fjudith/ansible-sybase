@@ -3,23 +3,29 @@ sybase:
   user: 'sybase'
   group: 'sybase'
   # Password the SAP ASE internal 'sa' account
-  password: 'myPassword'
+  sa_password: 'myPassword'
   install:
-    # SAP ASE Download url 
-    archive_url: 'http://repository.transtep.com/repository/thirdparty/sybase/ASE16SP02/ASE_Suite.linuxamd64.tgz'
-    archive_sha256: 'e975d282fdab520e6b690df7ec5aa14c3aacf91adc6171687856a7d12d1b3d4c'
-    # Sybase installation directory
-    directory: '/home/sybase'
-    # Sybase physical data directory
-    physical_name: '/home/sybase'
-    # Sybase language settings
-    characterset: 'utf8'
-    language: 'default_language'
-    sortorder: 'bin_utf8'
-    # Run silent installation
-    silent: 'True'
-    # Installed features:
-    sybase.install.features: 'fase_srv,fase_agent,fase_add_lm,fopen_client,fdblib,fjconnect70,fsysam_util,fscc_server,fasemap,fase_snmp_agent'
+    server:
+      # Kernel Share Memory
+      kernel_shmmax: 2147483648
+      # SAP ASE Download url 
+      archive_url: 'http://repository.transtep.com/repository/thirdparty/sybase/ASE16SP02/ASE_Suite.linuxamd64.tgz'
+      # Vagrant Only
+      archive_vagrant: /vagrant/hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
+      archive_checksum: 'sha256:e975d282fdab520e6b690df7ec5aa14c3aacf91adc6171687856a7d12d1b3d4c'
+
+      # Sybase installation directory
+      directory: '/home/sybase'
+      # Sybase physical data directory
+      physical_name: '/home/sybase'
+      # Sybase language settings
+      characterset: 'utf8'
+      language: 'default_language'
+      sortorder: 'bin_utf8'
+      # Run silent installation
+      silent: 'True'
+      # Installed features:
+      features: 'fase_srv,fase_agent,fase_add_lm,fopen_client,fdblib,fjconnect70,fsysam_util,fscc_server,fasemap,fase_snmp_agent'
   networking:
     # Sybase listen ports
     interface: '0.0.0.0'
