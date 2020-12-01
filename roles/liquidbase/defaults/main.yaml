@@ -1,0 +1,8 @@
+liquidbase:
+  version: 4.2.0
+  user: 'sybase'
+  group: 'sybase'
+  install:
+    
+    directory: /home/sybase
+  
