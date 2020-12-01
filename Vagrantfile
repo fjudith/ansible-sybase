@@ -47,9 +47,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
       end
 
-      # Shared folders
-      srv.vm.synced_folder '.', '/vagrant', disabled: true
-
       # Set private network insterface
       srv.vm.network :private_network, ip: serverIP(NUMBER)
 
@@ -80,8 +77,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       
       # Run Ansible playbook
       if boxes['ansible']
-        srv.vm.provision "ansible" do |ansible|
-        ansible.playbook.file = boxes['ansible']['playbook']
+        # Shared folders
+        srv.vm.synced_folder './',
+        '/vagrant',
+        disabled: false,
+        type: "rsync",
+        rsync__auto: true,
+        rsync__exclude: ['.vagrant/', '.vscode/', '.git/']
+        
+        srv.vm.provision "ansible_local" do |ansible|
+          ansible.become = true
+          ansible.verbose = true
+          ansible.playbook = boxes['ansible']['playbook']
+          ansible.galaxy_roles_path = '/vagrant/roles'
+        end
       
       else
       
