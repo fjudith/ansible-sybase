@@ -34,9 +34,7 @@ yum_repos:
 # Additional packages to be installed
 package_update: True
 packages:
-  - nano
-  - vim
-  - wget
+  - htop
   - curl
   # 32-bit libraries for isql
   # - compat-libstdc++-33-3.2.3-72.el7.x86_64
@@ -72,11 +70,11 @@ packages:
   - python3
   - python3-pip
   - python3-setuptools
+  - libselinux-python3
   # Docker engine
   - docker-ce
   - docker-ce-cli
   - containerd.io
-
 
 runcmd:
   # Install Ansible
@@ -84,20 +82,3 @@ runcmd:
   # Start Docker
   - [/usr/bin/systemctl, enable, docker.service]
   - [/usr/bin/systemctl, start, docker.service]
-
-# apt:
-#   sources:
-#     docker.list:
-#       source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
-#       # curl -sL https://download.docker.com/linux/ubuntu/gpg | gpg
-#       keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-
-# packages:
-#   - apt-transport-https
-#   - ca-certificates
-#   - curl
-#   - gnupg-agen
-#   - software-properties-common
-#   - docker-ce
-#   - docker-ce-cli
-#   - containerd.io
