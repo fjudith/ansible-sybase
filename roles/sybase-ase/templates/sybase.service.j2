@@ -4,7 +4,7 @@ Wants=network-online.target
 After=network-online.target firewalld.service
 
 [Service]
-User=sybase
+User={{ sybase.user }}
 EnvironmentFile={{ sybase.install.server.directory }}/SYBASE.env
 ExecStart={{ sybase.install.server.directory }}/bin/start-server.sh {{ sybase.networking.name }}
 ExecStop={{ sybase.install.server.directory }}/bin/stop-server.sh {{ sybase.networking.name }}

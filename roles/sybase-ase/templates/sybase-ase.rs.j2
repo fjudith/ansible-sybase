@@ -36,5 +36,5 @@ sqlsrv.sybpcidb_device_physical_name: {{ sybase.install.server.physical_name }}/
 sqlsrv.sybpcidb_device_size: 384
 sqlsrv.sybpcidb_database_size: 384
 sqlsrv.do_optimize_config: no
-sqlsrv.avail_physical_memory:
-sqlsrv.avail_cpu_num:
+sqlsrv.avail_physical_memory: {{ sybase.install.server.memory }}
+sqlsrv.avail_cpu_num: {{ sybase.install.server.cpu }}

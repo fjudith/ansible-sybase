@@ -1,0 +1,15 @@
+- name: Enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Enable port {{ sybase.networking port }} on Firewalld
+  firewalld:
+    port: "{{ sybase.networking port }}/tcp"
+    permanent: true
+    state: enaled
+    zone: public
+  notify: restart-frewalld
+  when: ansible_os_family == "RedHat"

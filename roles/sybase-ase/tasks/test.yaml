@@ -7,4 +7,4 @@
       go
       EOF
   args:
-    executable: /binbash
+    executable: /bin/bash

@@ -6,7 +6,11 @@ sybase:
   sa_password: 'myPassword'
   install:
     server:
-      # Kernel Share Memory
+      # Physical memory MB allocated to the Sybase server instance (default: 2GB)
+      memory: 2048
+      # Number of CPU allocated to the Sybase server instance (default: 2)
+      cpu: 2
+      # Kernel Share Memory (default: 2GB)
       kernel_shmmax: 2147483648
       # SAP ASE Download url 
       archive_url: 'http://repository.transtep.com/repository/thirdparty/sybase/ASE16SP02/ASE_Suite.linuxamd64.tgz'

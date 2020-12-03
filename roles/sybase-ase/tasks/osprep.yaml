@@ -1,0 +1,29 @@
+- name: Increase Kernel shared memory
+  become: true
+  sysctl:
+    name: kernel.shmmax
+    value: "{{ sybase.install.server.kernel_shmmax }}"
+
+- name: Add 'sybase' user
+  become: true
+  user:
+    name: "{{ sybase.user }}"
+    group: "{{ sybase.user }}"
+    create_home: 'yes'
+
+# - name: Install required packages
+#   become: true
+#   package:
+#     name:
+#       - gtk2
+#       - libaio
+#       - glibc
+#       - glibc-devel
+#       - glibc.i686
+#       - glibc-devel.i686
+#       - libstdc++-devel
+#       - libstdc++-devel.i686
+#       - libgcc
+#       - libgcc.i686
+#     state: present
+#   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"

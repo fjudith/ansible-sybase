@@ -1,9 +1,11 @@
 - name: Check if Sybase already installed
+  become: true
   stat:
     path: "{{ sybase.install.server.directory }}/SYBASE.sh"
   register: sybase_install
 
 - name: Check if Server already built
+  become: true
   stat:
     path: "{{ sybase.install.server.directory }}/ASE_16.0/install/SYBASE.sh/RUN_{{ sybase.networking.name }}"
   register: sybase_build
@@ -11,11 +13,14 @@
 - name: Install Sybase
   # become: true
   # become_user: "{{ sybase.user }}"
-  command: |
+  shell: |
     /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ase-response.conf \
     -i silent \
     -DAGREE_TO_SAP_LICENSE=true \
-    -DRUN_SILENT=true \
+    -DRUN_SILENT=true && \
+    rm -vrf /tmp/ASE_Suite
+  args:
+    executable: /bin/bash
   when: not sybase_install.stat.exists
 
 - name: Build Sybase server
@@ -24,6 +29,8 @@
   shell: |
     source {{ sybase.install.server.directory }}/SYBASE.sh && \
     {{ sybase.install.server.directory }}/ASE-16_0/bin/srvbuildres -r /tmp/sybase-ase.rs
+  args:
+    executable: /bin/bash
   when: not sybase_build.stat.exists
 
 - name: Configure Sybase interfaces
@@ -32,7 +39,14 @@
     dest: "{{ sybase.install.server.directory }}/interfaces"
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
-    mode: 0440
+    mode: 0770
+
+- name: Create custom scripts directory
+  file:
+    path: "{{ sybase.install.server.directory }}/bin"
+    state: directory
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
 
 - name: Copy Sybase startup script
   template:
@@ -40,7 +54,7 @@
     dest: "{{ sybase.install.server.directory }}/bin/start-server.sh"
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
-    mode: 0750
+    mode: 0755
 
 - name: Copy Sybase stop script
   template:
@@ -48,7 +62,7 @@
     dest: "{{ sybase.install.server.directory }}/bin/stop-server.sh"
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
-    mode: 0750
+    mode: 0755
 
 - name: Install Sybase Systemd service
   template:
@@ -78,5 +92,21 @@
   become: true
   become_user: "{{ sybase.user }}"
   lineinfile:
-    path: "{{ sybase.install.server.directory }}/.bashrc"
+    path: "/home/{{ sybase.user }}/.bashrc"
     line: "source {{ sybase.install.server.directory }}/SYBASE.sh"
+
+- name: Change Sybase directory owner
+  file:
+    path: "{{ sybase.install.server.directory }}"
+    state: directory
+    recurse: yes
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+
+- name: Change Sybase data directory owner
+  file:
+    path: "{{ sybase.install.server.physical_name }}"
+    state: directory
+    recurse: yes
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"

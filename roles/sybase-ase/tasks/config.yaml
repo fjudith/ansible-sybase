@@ -14,7 +14,7 @@
   get_url:
     url: "{{ sybase.install.server.archive_url }}"
     dest: /tmp/ASE_Suite.linuxamd64.tgz
-    mode: 0444
+    mode: 0644
     checksum: "{{ sybase.install.server.archive_checksum }}"
   register: archive_url
   when: not archive_vagrant.stat.exists
@@ -28,10 +28,10 @@
   template:
     src: sybase-ase-response.conf.j2
     dest: /tmp/sybase-ase-response.conf
-    mode: 0440
+    mode: 0644
 
 - name: Create Sybase installation resource file
   template:
     src: sybase-ase.rs.j2
     dest: /tmp/sybase-ase.rs
-    mode: 0440
+    mode: 0644
