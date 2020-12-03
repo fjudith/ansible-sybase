@@ -9,7 +9,7 @@ They can easyly be reused accross cloud service provider specific distributions 
 
 ### Why a Scripted and Ansible deployments ?
 
-The `scripted` deployment is close to the SAP [Installation Guide For Linux](https://help.sap.com/viewer/244b731a316a4de0ad1dd618937b0f8e/16.0.0.0/en-US), where the `ansible` is more **robust** transcript. Following the moto _Automate what you know to run manually_, change are first released to the `scripted` deployment method, then capitalized to `ansible`.
+The `scripted` deployment is close to the SAP [Installation Guide For Linux](https://help.sap.com/viewer/23c3bb4a29be443ea887fa10871a30f8/16.0.2.9/en-US), where the `ansible` is more **robust** transcript. Following the moto _Automate what you know to run manually_, change are first released to the `scripted` deployment method, then capitalized to `ansible`.
 
 > The scripted method is also easier to **containerize** using the Dockerfile specification.
 
@@ -30,8 +30,8 @@ Machine type            | box             | version | Antivirus | linked clone |
 ------------------------|-----------------|---------|-----------|--------------|---------------------|-----------
 Bastion (1 cpu/ 1024MB) | generic/centos7 | 3.1.8   | off       | false        | scripted            | 00:10:00
 Bastion (1 cpu/ 1024MB) | centos/7        | 3004.1  | off       | false        | scripted            | 00:11:00
-Bastion (1 cpu/ 1024MB) | generic/centos7 | 3.1.8   | off       | false        | Ansible             | 00:10:00
-Bastion (1 cpu/ 1024MB) | centos/7        | 3004.1  | off       | false        | Ansible             | 00:11:00
+Bastion (1 cpu/ 1024MB) | generic/centos7 | 3.1.8   | off       | false        | Ansible             | 00:11:30
+Bastion (1 cpu/ 1024MB) | centos/7        | 3004.1  | off       | false        | Ansible             | 00:12:00
 
 #### Vagrant generic/centos7 box
 
