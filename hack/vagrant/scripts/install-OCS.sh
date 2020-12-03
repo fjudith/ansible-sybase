@@ -44,7 +44,5 @@ echo "source ${SYBASE}/SYBASE.sh" | tee -a ${SYBASE}/.bashrc && \
 /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ocs-response.conf \
 -i silent \
 -DAGREE_TO_SAP_LICENSE=true \
--DRUN_SILENT=true
-
-# Remove ASE installation files
+-DRUN_SILENT=true && \
 rm -vrf /tmp/ASE_Suite

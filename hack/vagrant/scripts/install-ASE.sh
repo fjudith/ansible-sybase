@@ -44,7 +44,8 @@ echo "Install SAP ASE" && \
 /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ase-response.conf \
 -i silent \
 -DAGREE_TO_SAP_LICENSE=true \
--DRUN_SILENT=true
+-DRUN_SILENT=true && \
+rm -vrf /tmp/ASE_Suite
 
 # Copy resource file
 echo "Replace resource file" && \
@@ -69,7 +70,7 @@ cp /tmp/stop-server.sh ${SYBASE}/bin/ && \
 chmod +x ${SYBASE}/bin/stop-server.sh && \
 
 # Kill running processes
-sudo /usr/bin/pkill --echo dataserver
+/usr/bin/pkill --echo dataserver
 
 # Enable Sybase Service
 echo "Install systemd service"
@@ -79,8 +80,6 @@ chown -R sybase:sybase ${SYBASE}/ && \
 cp /tmp/sybase.service /etc/systemd/system/sybase.service && \
 systemctl enable sybase.service && \
 systemctl start sybase.service
-
-# Stop password
 
 # Remove ASE installation files
 rm -vrf /tmp/ASE_Suite
