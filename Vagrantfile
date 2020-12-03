@@ -61,11 +61,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Hyper-V
       srv.vm.provider 'hyperv' do |hv|
-        hv.customize ['modifyvm', :id, '--cpus', boxes['cpus']] if boxes.key? 'cpus'
-        hv.customize ['modifyvm', :id, '--cpuexecutioncap', boxes['cpu_execution_cap']] if boxes.key? 'cpuexecutioncap'
-        hv.customize ['modifyvm', :id, '--memory', boxes['ram']] if boxes.key? 'memory'
-        hv.customize ['modifyvm', :id, '--name', boxes['name']] if boxes.key? 'name'
-        hv.customize ['modifyvm', :id, '--description', boxes['description']] if boxes.key? 'description'
+        hv.cpus   = boxes['cpus'] if boxes.key? 'cpus'
+        hv.memory = boxes['ram'] if boxes.key? 'memory'
+        hv.vmname = boxes['name'] if boxes.key? 'name'
       end
 
       # Copy cloud-init files to tmp and provision
@@ -90,6 +88,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.verbose = true
           ansible.playbook = boxes['ansible']['playbook']
           ansible.galaxy_roles_path = '/vagrant/roles'
+          ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3", ansible_stdout_callback: "debug"}
         end
       
       else
