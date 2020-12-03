@@ -1,5 +1,5 @@
 - hosts: bastion
   gather_facts: false
   roles:
-    - sap_ocs
-    - liquidbase
+    - sybase-ocs
+    # - liquidbase
