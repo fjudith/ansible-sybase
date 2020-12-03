@@ -1,3 +1,4 @@
 {
-    "templateFinder.extension.activated": true
+    "templateFinder.extension.activated": true,
+    "python.pythonPath": "/usr/bin/python3"
 }
