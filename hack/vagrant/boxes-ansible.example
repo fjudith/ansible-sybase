@@ -1,0 +1,39 @@
+---
+- name: database
+  hostname: database.local
+  description: Sybase Database server
+  box: generic/centos7
+  box_version: "3.1.8"
+  cpus: 2
+  memory: 2048
+  forward_port:
+    - name: ssh
+      port: 22
+      expose: 52222
+    - name: sybase
+      port: 5000
+      expose: 5000
+  provision:
+    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud/user-data_database.yaml
+    cloud-init: ./hack/vagrant/scripts/cloud-init.sh
+  ansible:
+    playbook: ./hack/vagrant/playbook_database.yaml
+
+- name: bastion
+  hostname: bastion.local
+  description: Bastion server
+  box: generic/centos7
+  box_version: "3.1.8"
+  cpus: 1
+  memory: 1024
+  forward_port:
+    - name: ssh
+      port: 22
+      expose: 42222
+  provision:
+    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud/user-data_bastion.yaml
+    cloud-init: ./hack/vagrant/scripts/cloud-init.sh
+  ansible:
+    playbook: ./hack/vagrant/playbook_bastion.yaml
