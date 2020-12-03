@@ -1,0 +1,5 @@
+{{ sybase.networking.name }}
+	master tcp ether {{ sybase.networking.interface }} {{ sybase.networking.port }}
+
+{{ sybase.networking.name }}_BS
+	master tcp ether {{ sybase.networking.interface }} {{ sybase.networking.backup_port }}

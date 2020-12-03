@@ -1,4 +1,5 @@
 - name: Check if Sybase already installed
+  become: true
   stat:
     path: "{{ sybase.install.client.directory }}/SYBASE.sh"
   register: sybase_install
@@ -25,3 +26,11 @@
   lineinfile:
     path: "{{ sybase.install.client.directory }}/.bashrc"
     line: "source {{ sybase.install.client.directory }}/SYBASE.sh"
+
+- name: Change Sybase directory owner
+  file:
+    path: "{{ sybase.install.client.directory }}"
+    state: directory
+    recurse: yes
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"

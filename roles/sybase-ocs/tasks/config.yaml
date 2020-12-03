@@ -3,19 +3,19 @@
     path: "{{ sybase.install.client.archive_vagrant }}"
   register: archive_vagrant
 
-- name: Move Vagrant installation package to '/tmp'
-  copy:
+- name: Symlink Vagrant installation package in '/tmp'
+  file:
     src: "{{ sybase.install.client.archive_vagrant }}"
     dest: /tmp/ASE_Suite.linuxamd64.tgz
-    mode: 0444
+    state: link
   when: archive_vagrant.stat.exists
 
 - name: Download Sybase installation package
   get_url:
     url: "{{ sybase.install.client.archive_url }}"
     dest: /tmp/ASE_Suite.linuxamd64.tgz
-    mode: 0444
-    checksum: "{{ sybase.install.client.archive_checksum }}"
+    mode: 0644
+    checksum: "{{ sybase.install.server.archive_checksum }}"
   register: archive_url
   when: not archive_vagrant.stat.exists
 
