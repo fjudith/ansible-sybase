@@ -36,31 +36,22 @@ package_update: True
 packages:
   - htop
   - curl
-  # 32-bit libraries for isql
-  # - compat-libstdc++-33-3.2.3-72.el7.x86_64
-  # - glibc-2.17-106.el7_2.6.i686
-  # - libXtst-devel
-  # - libXtst-devel
-  # - libXi-devel
-  # - openmotif-devel
-  # - libXmu-devel
-  # - libXt-devel
-  # - libXext-devel
-  # - libXp-devel
-  # - libX11-devel
-  # - libSM-devel
-  # - libICE-devel
-  # - libaio
-  - gtk2
+  # Sybase : https://help.sap.com/viewer/23c3bb4a29be443ea887fa10871a30f8/16.0.2.9/en-US/6302c568328c4f599bd0209e6beb1e4c.html
+  - compat-libstdc++-33-3.2.3-72.el7.x86_64
   - libaio
   - glibc
-  - glibc-devel
+  - compat-glibc-2.5-46.2.x86_64
   - glibc.i686
-  - glibc-devel.i686
-  - libstdc++-devel
-  - libstdc++-devel.i686
-  - libgcc
-  - libgcc.i686
+  - libXtst-devel
+  - libXi-devel
+  - openmotif-devel
+  - libXmu-devel
+  - libXt-devel
+  - libXext-devel
+  - libXp-devel
+  - libX11-devel
+  - libSM-devel
+  - libICE-devel
   # FreeTDS
   - unixODBC
   - unixODBC-devel
