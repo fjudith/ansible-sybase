@@ -1,5 +1,8 @@
 # SAP Adaptive Server Enterprise reference documentation
 
-* [Installation Guide For Linux](https://help.sap.com/viewer/244b731a316a4de0ad1dd618937b0f8e/16.0.0.0/en-US)
-* [System Administration Guide: Volume 1](https://help.sap.com/viewer/4990a1994c484e268281c89d240613ed/16.0.0.0/en-US)
-* [System Administration Guide: Volume 2](https://help.sap.com/viewer/448fe23c2498459f8295d26d0a483df2/16.0.0.0/en-US)
+**ASE 16.0 SP02 PL09**:
+
+* [SAP Adaptive Server Enterprise](https://help.sap.com/viewer/product/SAP_ASE/16.0.2.9/en-US)
+* [Installation Guide For Linux](https://help.sap.com/viewer/23c3bb4a29be443ea887fa10871a30f8/16.0.2.9/en-US)
+* [System Administration Guide: Volume 1](https://help.sap.com/viewer/aa939a27edb34f019f71cc47b9c0fd9a/16.0.2.9/en-US)
+* [System Administration Guide: Volume 2](https://help.sap.com/viewer/3bdda6b0ffad441aab4fe51e4e876a19/16.0.2.9/en-US)
