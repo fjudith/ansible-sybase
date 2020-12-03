@@ -5,7 +5,7 @@
   box: generic/centos7
   box_version: "3.1.8"
   cpus: 2
-  memory: 2048
+  memory: 4096
   forward_port:
     - name: ssh
       port: 22
