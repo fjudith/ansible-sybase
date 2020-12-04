@@ -12,7 +12,7 @@ if [ -x ${_isql} ]
 then
   echo "Stopping Sybase server .... ${_server}"
   ${_isql} -U sa -S ${_server} << EOF
-$( cat {{ sybase.install.server.directory }}/.sa_password )
+$( /usr/bin/cat {{ sybase.install.server.directory }}/.sa_password )
 shutdown
 go
 EOF
