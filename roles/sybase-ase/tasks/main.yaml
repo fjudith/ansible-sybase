@@ -6,3 +6,6 @@
 
 - name: ASE | Install
   import_tasks: install.yaml
+
+- name: ASE | Firewall
+  import_tasks: firewall.yaml
