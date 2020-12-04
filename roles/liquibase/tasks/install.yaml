@@ -1,0 +1,39 @@
+- name: Create Liquibase directory
+  file:
+    name: "{{ liquibase.install.directory }}"
+    state: directory
+    mode: 0750
+
+- name: Download and install Liquibase
+  unarchive:
+    src: "https://github.com/liquibase/liquibase/releases/download/v{{ liquibase.version }}/liquibase-{{ liquibase.version }}.tar.gz"
+    dest: "{{ liquibase.install.directory }}"
+    remote_src: yes
+
+- name: Add Liquibase PATH variable using profile.d
+  copy:
+    dest: /etc/profile.d/liquibase.sh
+    content: "PATH=$PATH:{{ liquibase.install.directory }}"
+    mode: 0755
+  when:
+    - liquibase.install.global is defined
+    - liquibase.install.global == true
+
+- name: Add Liquibase PATH variable using .bashrc
+  become: true
+  become_user: "{{ sybase.user }}"
+  lineinfile:
+    path: "/home/{{ sybase.user }}/.bashrc"
+    line: "export PATH=$PATH:{{ liquibase.install.directory }}"
+  when:
+    - liquibase.install.global is defined
+    - liquibase.install.global == false
+
+# Set Ansible fact that Liquibase has completed installation. This is so that this role can be used in
+# other dependent roles. Those roles can check for this fact to determine whether or not this role
+# should be run. Failing to do so will mean that this role is executed even if it has already been run.
+- name: Set fact liquibase_installed
+  set_fact:
+    liquibase_installed: true
+  tags:
+    - liquibase_install

@@ -1,0 +1,10 @@
+
+- name: Install Liquibase JDBC drivers
+  maven_artifact:
+    repository_url: "https://repo1.maven.org/maven2"
+    version: "{{ item.version }}"
+    artifact_id: "{{ item.artifact_id }}"
+    group_id: "{{ item.group_id }}"
+    dest: "{{ liquibase.install.directory }}/lib/"
+    keep_name: yes
+  loop: "{{ liquibase.drivers }}"

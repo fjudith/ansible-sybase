@@ -1,0 +1,9 @@
+
+- name: Liquibase | OS preparation
+  import_tasks: osprep.yaml
+
+- name: Liquibase | Install
+  import_tasks: install.yaml
+
+- name: Liquibase | Drivers
+  import_tasks: driver.yaml

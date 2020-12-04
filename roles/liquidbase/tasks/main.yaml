@@ -1,3 +1,0 @@
-
-- name: Liquidbase | Install
-  import_tasks: install.yaml

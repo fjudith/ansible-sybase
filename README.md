@@ -14,7 +14,7 @@ Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress
 * [Vagrant](https://www.vagrantup.com): Local development environment provisionning
 * [Cloud-Init](https://cloud-init.io): Initial instance bootime provisionning
 * [Ansible](https://www.ansible.com): Software provisionning and configuration management
-* [Liquidbase](https://liquidbase.org): Database operation management
+* [Liquibase](https://liquibase.org): Database operation management
 
 ## Languages
 

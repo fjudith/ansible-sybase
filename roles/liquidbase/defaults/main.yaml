@@ -1,9 +1,0 @@
-liquidbase:
-  version: 4.2.0
-  user: 'sybase'
-  group: 'sybase'
-  install:
-    directory: /home/sybase
-  driver_jconnect_url: https://dbeaver.io/files/jdbc/drivers/sybase/jconnect/jconn4.jar
-  driver_jtds_url:  https://repo1.maven.org/maven2/net/sourceforge/jtds/jtds/1.3.1/jtds-1.3.1.jar
-  

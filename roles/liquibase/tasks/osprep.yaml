@@ -1,0 +1,5 @@
+- name: Install required Python packages
+  pip:
+    name:
+      - lxml
+      - boto

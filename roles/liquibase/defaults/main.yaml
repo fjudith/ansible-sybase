@@ -1,0 +1,77 @@
+liquibase:
+  version: 4.2.0
+  user: 'sybase'
+  group: 'sybase'
+  install:
+    global: false
+    directory: /home/sybase/liquibase
+  # Driver list: https://github.com/liquibase/docker/blob/main/Dockerfile
+  drivers:
+    - name: postgresql
+      group_id: org.postgresql
+      artifact_id: postgresql
+      version: 42.2.12
+      url: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.12/postgresql-42.2.12.jar
+    
+    - name: mssql
+      group_id: com.microsoft.sqlserver
+      artifact_id: mssql-jdbc
+      version: 8.4.1.jre11
+      url: https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.4.1.jre11/mssql-jdbc-8.4.1.jre11.jar
+  
+    - name: mariadb
+      group_id: org.mariadb.jdbc
+      artifact_id: mariadb-java-client
+      version: 2.6.0
+      url: https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/2.6.0/mariadb-java-client-2.6.0.jar
+ 
+    - name: h2
+      group_id: com.h2database
+      artifact_id: h2
+      version: 1.4.200
+      url: https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+      
+    - name: db2
+      group_id: com.ibm.db2
+      artifact_id: jcc
+      version: 11.1.4.4
+      url: https://repo1.maven.org/maven2/com/ibm/db2/jcc/11.1.4.4/jcc-11.1.4.4.jar
+
+    - name: snowflake
+      group_id: net.snowflake
+      artifact_id: snowflake-jdbc
+      version: 3.12.3
+      url: https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.12.3/snowflake-jdbc-3.12.3.jar
+
+    - name: sybase
+      group_id: net.sf.squirrel-sql.plugins
+      artifact_id: sybase
+      version: 3.5.0
+      url: https://repo1.maven.org/maven2/net/sf/squirrel-sql/plugins/sybase/3.5.0/sybase-3.5.0.jar
+
+    - name: firebird
+      group_id: net.sf.squirrel-sql.plugins
+      artifact_id: firebird
+      version: 3.5.0
+      url: https://repo1.maven.org/maven2/net/sf/squirrel-sql/plugins/firebird/3.5.0/firebird-3.5.0.jar
+
+    - name: sqlite
+      group_id: org.xerial
+      artifact_id: sqlite-jdbc
+      version: 3.31.1
+      url: https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.31.1/sqlite-jdbc-3.31.1.jar
+
+    - name: mysql
+      group_id: mysql
+      artifact_id: mysql-connector-java
+      version: 8.0.19
+      url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar
+
+    - name: jtds
+      group_id: net.sourceforge.jtds
+      artifact_id: jtds
+      version: 1.3.1
+      url: https://repo1.maven.org/maven2/net/sourceforge/jtds/jtds/1.3.1/jtds-1.3.1.jar
+
+    # - name: jconnect
+    #   url: https://dbeaver.io/files/jdbc/drivers/sybase/jconnect/jconn4.jar

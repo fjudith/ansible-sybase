@@ -18,9 +18,9 @@ This stream relates to the delivery located in the following directories:
 
 * [./roles/sybase-ase](./roles/sybase-ase/)
 * [./roles/sybase-ocs](./roles/sybase-ocs/)
-* [./roles/liquidbase](./roles/liquidbase/)
+* [./roles/liquibase](./roles/liquibase/)
   
 * [ ] Manage SAP ASE server installation using Ansible
 * [x] Manage SAP OCS client installation using Ansible
-* [x] Manage [Liquidbase](http://liquidbase.org) client installation using Ansible
+* [x] Manage [Liquibase](http://liquibase.org) client installation using Ansible
 * [x] Manage Docker-CE engine installation on OCS client instance
