@@ -9,7 +9,7 @@
 - name: Check if Server already built
   become: true
   stat:
-    path: "{{ sybase.install.server.directory }}/ASE_16.0/install/SYBASE.sh/RUN_{{ sybase.networking.name }}"
+    path: "{{ sybase.install.server.directory }}/ASE-16_0/install/RUN_{{ sybase.networking.name }}"
   register: sybase_build
   tags:
     - sap_ase_install
