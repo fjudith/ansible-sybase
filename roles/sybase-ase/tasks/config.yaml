@@ -1,7 +1,7 @@
 - name: Check if Sybase already configured
   become: true
   stat:
-    path: "{{ sybase.install.client.directory }}/interfaces"
+    path: "{{ sybase.install.server.directory }}/interfaces"
   register: sybase_config
 
 - name: Check if Sybase installation package synced using Vagrant
