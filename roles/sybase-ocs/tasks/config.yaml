@@ -1,3 +1,9 @@
+- name: Check if Sybase already configured
+  become: true
+  stat:
+    path: "{{ sybase.install.client.directory }}/interfaces"
+  register: sybase_config
+
 - name: Check if Sybase installation package synced using Vagrant
   stat:
     path: "{{ sybase.install.client.archive_vagrant }}"
@@ -23,6 +29,7 @@
   unarchive:
     src: /tmp/ASE_Suite.linuxamd64.tgz
     dest: "/tmp/"
+  when: not sybase_config.stat.exists
 
 - name: Create Sybase installation response file
   template:
