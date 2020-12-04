@@ -89,6 +89,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.verbose = true
           ansible.playbook = boxes['ansible']['playbook']
           ansible.galaxy_roles_path = '/vagrant/roles'
+          ansible.galaxy_role_file = "requirements.yaml"
           ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3", ansible_stdout_callback: "debug"}
         end
       

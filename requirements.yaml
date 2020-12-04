@@ -1,0 +1,4 @@
+# Collection
+# https://docs.ansible.com/ansible/2.9/modules/firewalld_module.html
+collections:
+- name: ansible.posix
