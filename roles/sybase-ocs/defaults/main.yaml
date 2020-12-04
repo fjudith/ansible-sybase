@@ -1,5 +1,6 @@
 # User to run SAP ASE 
 sybase:
+  version: 16.0.2.2
   user: 'sybase'
   group: 'sybase'
   # Password the SAP ASE internal 'sa' account
