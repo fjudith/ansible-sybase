@@ -3,7 +3,7 @@
   hostname: database.local
   description: Sybase Database server
   box: generic/centos7
-  box_version: "3.1.8"
+  box_version: "3.1.10"
   paravirtprovider: hyperv
   cpus: 2
   memory: 4096
@@ -25,7 +25,7 @@
   hostname: bastion.local
   description: Bastion server
   box: generic/centos7
-  box_version: "3.1.8"
+  box_version: "3.1.10"
   paravirtprovider: hyperv
   cpus: 1
   memory: 1024
