@@ -6,6 +6,8 @@
   box_version: "3.1.8"
   cpus: 2
   memory: 2048
+  # WSL / Docker Desktop users ? uncomment the above line
+  # paravirtprovider: hyperv 
   forward_port:
     - name: ssh
       port: 22
@@ -27,6 +29,8 @@
   box_version: "3.1.8"
   cpus: 1
   memory: 1024
+  # WSL / Docker Desktop users ? uncomment the above line
+  # paravirtprovider: hyperv 
   forward_port:
     - name: ssh
       port: 22

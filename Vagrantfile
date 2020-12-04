@@ -57,6 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ['modifyvm', :id, '--memory', boxes['memory']] if boxes.key? 'memory'
         vb.customize ['modifyvm', :id, '--name', boxes['name']] if boxes.key? 'name'
         vb.customize ['modifyvm', :id, '--description', boxes['description']] if boxes.key? 'description'
+        vb.customize ['modifyvm', :id, '--paravirtprovider', boxes['paravirtprovider']] if boxes.key? 'paravirtprovider'
       end
 
       # Hyper-V
