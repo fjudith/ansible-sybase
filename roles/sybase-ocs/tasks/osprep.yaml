@@ -1,16 +1,3 @@
-- name: Disable address space layout randomization (ASLR)
-  become: true
-  sysctl:
-    name:  kernel.randomize_va_space
-    value: '0'
-    state: present
-
-- name: Disable IPv6
-  become: true
-  sysctl:
-    name: net.ipv6.conf.all.disable_ipv6
-    value: '1'
-
 - name: Increase Kernel shared memory
   become: true
   sysctl:
