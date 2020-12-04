@@ -3,6 +3,8 @@
   stat:
     path: "{{ sybase.install.client.directory }}/SYBASE.sh"
   register: sybase_install
+  tags:
+    - sap_ocs_install
 
 - name: Install Sybase
   command: >-
@@ -11,6 +13,9 @@
     -DAGREE_TO_SAP_LICENSE=true
     -DRUN_SILENT=true
   when: not sybase_install.stat.exists
+  tags:
+    - sap_ocs_install
+
 
 - name: Configure Sybase interfaces
   template:
@@ -19,6 +24,8 @@
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
     mode: 0440
+  tags:
+    - sap_ocs_install
 
 - name: Update .bashrc
   become: true
@@ -26,6 +33,8 @@
   lineinfile:
     path: "{{ sybase.install.client.directory }}/.bashrc"
     line: "source {{ sybase.install.client.directory }}/SYBASE.sh"
+  tags:
+    - sap_ocs_install
 
 - name: Change Sybase directory owner
   file:
@@ -34,3 +43,22 @@
     recurse: yes
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
+  tags:
+    - sap_ocs_install
+
+# Cleanup install by deleting downloaded SAP ASE unarchive path
+- name: Remove SAP ASE unarchive directory
+  file:
+    path: /tmp/ASE_Suite
+    state: absent
+  tags:
+    - sap_ocs_cleanup
+
+# Set Ansible fact that SAP OCS has completed installation. This is so that this role can be used in
+# other dependent roles. Those roles can check for this fact to determine whether or not this role
+# should be run. Failing to do so will mean that this role is executed even if it has already been run.
+- name: Set fact sap_ocs_installed
+  set_fact:
+    sap_ase_installed: true
+  tags:
+    - sap_ocs_install

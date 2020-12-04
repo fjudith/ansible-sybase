@@ -3,12 +3,16 @@
   stat:
     path: "{{ sybase.install.server.directory }}/SYBASE.sh"
   register: sybase_install
+  tags:
+    - sap_ase_install
 
 - name: Check if Server already built
   become: true
   stat:
     path: "{{ sybase.install.server.directory }}/ASE_16.0/install/SYBASE.sh/RUN_{{ sybase.networking.name }}"
   register: sybase_build
+  tags:
+    - sap_ase_install
 
 - name: Install Sybase
   # become: true
@@ -17,11 +21,12 @@
     /tmp/ASE_Suite/setup.bin -f /tmp/sybase-ase-response.conf \
     -i silent \
     -DAGREE_TO_SAP_LICENSE=true \
-    -DRUN_SILENT=true && \
-    rm -vrf /tmp/ASE_Suite
+    -DRUN_SILENT=true
   args:
     executable: /bin/bash
   when: not sybase_install.stat.exists
+  tags:
+    - sap_ase_install
 
 - name: Build Sybase server
   # become: true
@@ -32,6 +37,8 @@
   args:
     executable: /bin/bash
   when: not sybase_build.stat.exists
+  tags:
+    - sap_ase_install
 
 - name: Configure Sybase interfaces
   template:
@@ -40,6 +47,8 @@
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
     mode: 0770
+  tags:
+    - sap_ase_install
 
 - name: Create custom scripts directory
   file:
@@ -47,6 +56,9 @@
     state: directory
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Copy Sybase startup script
   template:
@@ -55,6 +67,9 @@
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
     mode: 0755
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Copy Sybase stop script
   template:
@@ -63,6 +78,9 @@
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
     mode: 0755
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Install Sybase Systemd service
   template:
@@ -71,6 +89,9 @@
     mode: 0755
     owner: root
     group: root
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Enable Sybase Systemd service
   systemd:
@@ -78,6 +99,9 @@
     enabled: yes
     masked: no
     state: started
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Create SA password file
   copy:
@@ -87,6 +111,9 @@
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
     mode: 0400
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
 
 - name: Update .bashrc
   become: true
@@ -94,6 +121,8 @@
   lineinfile:
     path: "/home/{{ sybase.user }}/.bashrc"
     line: "source {{ sybase.install.server.directory }}/SYBASE.sh"
+  tags:
+    - sap_ase_install
 
 - name: Change Sybase directory owner
   file:
@@ -102,6 +131,8 @@
     recurse: yes
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
+  tags:
+    - sap_ase_install
 
 - name: Change Sybase data directory owner
   file:
@@ -110,3 +141,22 @@
     recurse: yes
     owner: "{{ sybase.user }}"
     group: "{{ sybase.group }}"
+  tags:
+    - sap_ase_install
+
+# Cleanup install by deleting downloaded SAP ASE unarchive path
+- name: Remove SAP ASE unarchive directory
+  file:
+    path: /tmp/ASE_Suite
+    state: absent
+  tags:
+    - sap_ase_cleanup
+
+# Set Ansible fact that SAP ASE has completed installation. This is so that this role can be used in
+# other dependent roles. Those roles can check for this fact to determine whether or not this role
+# should be run. Failing to do so will mean that this role is executed even if it has already been run.
+- name: Set fact sap_ase_installed
+  set_fact:
+    sap_ase_installed: true
+  tags:
+    - sap_ase_install
