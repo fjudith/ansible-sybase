@@ -1,15 +1,21 @@
-- name: Enable firewalld
+- name: Disable firewalld
   service:
     name: firewalld
-    state: started
-    enabled: yes
-  when: ansible_os_family == "RedHat"
+    state: stopped
+    enabled: no
 
-- name: Enable port {{ sybase.networking port }} on Firewalld
-  firewalld:
-    port: "{{ sybase.networking port }}/tcp"
-    permanent: true
-    state: enaled
-    zone: public
-  notify: restart-frewalld
-  when: ansible_os_family == "RedHat"
+# - name: Enable Sybase server port in Firewalld
+#   firewalld:
+#     port: "{{ sybase.networking.port }}/tcp"
+#     permanent: true
+#     state: enabled
+#     zone: public
+#   notify: restart-firewalld
+
+# - name: Enable Sybase backup server port in Firewalld
+#   firewalld:
+#     port: "{{ sybase.networking.backup_port }}/tcp"
+#     permanent: true
+#     state: enabled
+#     zone: public
+#   notify: restart-firewalld
