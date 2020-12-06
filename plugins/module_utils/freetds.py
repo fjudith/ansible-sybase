@@ -32,7 +32,7 @@ def freetds_connect(module, login_user=None, login_password=None, login_host=Non
         port=login_port,
         uid=login_user,
         pwd=login_password,
-        connect_timeout=connect_timeout,
+        timeout=connect_timeout,
     )
 
     # Monkey patch the Connection class to close the connection when garbage collected
