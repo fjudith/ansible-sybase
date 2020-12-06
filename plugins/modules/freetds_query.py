@@ -13,7 +13,7 @@ description:
 - Runs arbitrary FreeTDS queries.
 - Pay attention, the module does not support check mode!
   All queries will be executed in autocommit mode.
-- To run SQL queries from a file, use M(dbops.sybase.freetds_db) module.
+- To run SQL queries from a file, use M(sqlops.sybase.freetds_db) module.
 version_added: '0.1.0'
 options:
   query:
@@ -42,34 +42,34 @@ options:
     type: bool
     default: no
 seealso:
-- module: dbops.sybase.freetds_db
+- module: sqlops.sybase.freetds_db
 author:
 - Florian JUDITH (@fjudith)
 extends_documentation_fragment:
-- dbops.sybase.freetds
+- sqlops.sybase.freetds
 '''
 
 EXAMPLES = r'''
 - name: Simple select query to acme db
-  dbops.sybase.freetds_query:
+  sqlops.sybase.freetds_query:
     login_db: acme
     query: SELECT * FROM orders
 - name: Select query to db acme with positional arguments
-  dbops.sybase.freetds_query:
+  sqlops.sybase.freetds_query:
     login_db: acme
     query: SELECT * FROM acme WHERE id = %s AND story = %s
     positional_args:
     - 1
     - test
 - name: Select query to test_db with named_args
-  dbops.sybase.freetds_query:
+  sqlops.sybase.freetds_query:
     login_db: test_db
     query: SELECT * FROM test WHERE id = %(id_val)s AND story = %(story_val)s
     named_args:
       id_val: 1
       story_val: test
 - name: Run several insert queries against db test_db in single transaction
-  dbops.sybase.freetds_query:
+  sqlops.sybase.freetds_query:
     login_db: test_db
     query:
     - INSERT INTO articles (id, story) VALUES (2, 'my_long_story')
@@ -98,7 +98,7 @@ rowcount:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.dbops.sybase.plugins.module_utils.freetds import (
+from ansible_collections.sqlops.sybase.plugins.module_utils.freetds import (
     freetds_connect,
     freetds_common_argument_spec,
     freetds_driver,

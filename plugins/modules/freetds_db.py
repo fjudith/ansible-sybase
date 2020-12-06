@@ -144,10 +144,10 @@ options:
     version_added: '0.1.0'
 
 seealso:
-- module: dbops.sybase.freetds_info
-- module: dbops.sybase.freetds_variables
-- module: dbops.sybase.freetds_user
-- module: dbops.sybase.freetds_replication
+- module: sqlops.sybase.freetds_info
+- module: sqlops.sybase.freetds_variables
+- module: sqlops.sybase.freetds_user
+- module: sqlops.sybase.freetds_replication
 - name: Sybase command-line client reference
   description: Complete reference of the MySQL command-line client documentation.
   link: https://help.sap.com/viewer/e0d4539d39c34f52ae9ef822c2060077/16.0.2.9/en-US

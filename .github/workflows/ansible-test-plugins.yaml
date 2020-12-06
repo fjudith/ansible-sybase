@@ -14,8 +14,8 @@ on:
     - cron: '0 6 * * *'
 
 env:
-  sybase_version_file: "./ansible_collections/dbops/sybase/roles/sybase-ase/defaults/main.yaml"
-  connector_version_file: "./ansible_collections/dbops/sybase/tests/integration/targets/setup_freetds/vars/main.yaml"
+  sybase_version_file: "./ansible_collections/sqlops/sybase/roles/sybase-ase/defaults/main.yaml"
+  connector_version_file: "./ansible_collections/sqlops/sybase/tests/integration/targets/setup_freetds/vars/main.yaml"
   
 jobs:
   sanity:
@@ -31,7 +31,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
         with:
-          path: ansible_collections/dbops/sybase
+          path: ansible_collections/sqlops/sybase
       
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -43,7 +43,7 @@ jobs:
       
       - name: Run sanity tests
         run: ansible-test sanity --docker -v --color
-        working-directory: ./ansible_collections/dbops/sybase
+        working-directory: ./ansible_collections/sqlops/sybase
   
   integration:
     name: "Integration (Python: ${{ matrix.python }}, Ansible: ${{ matrix.ansible }}, Sybase: ${{ matrix.sybase }}, Connector: ${{ matrix.connector }})"
@@ -73,7 +73,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
         with:
-          path: ansible_collections/dbops/sybase
+          path: ansible_collections/sqlops/sybase
       
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -94,11 +94,11 @@ jobs:
       
       - name: Run integration tests
         run: ansible-test integration --docker -v --color --retry-on-error --continue-on-error --python ${{ matrix.python }} --diff --coverage
-        working-directory: ./ansible_collections/dbops/sybase
+        working-directory: ./ansible_collections/sqlops/sybase
       
       - name: Generate coverage report.
         run: ansible-test coverage xml -v --requirements --group-by command --group-by version
-        working-directory: ./ansible_collections/dbops/sybase
+        working-directory: ./ansible_collections/sqlops/sybase
       
       - uses: codecov/codecov-action@v1
         with:
