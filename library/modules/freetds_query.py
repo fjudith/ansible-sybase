@@ -7,10 +7,10 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: sybase_query
-short_description: Run Sybase queries
+module: freetds_query
+short_description: Run FreeTDS queries
 description:
-- Runs arbitrary Sybase queries.
+- Runs arbitrary FreeTDS queries.
 - Pay attention, the module does not support check mode!
   All queries will be executed in autocommit mode.
 - To run SQL queries from a file, use M(community.sybase.sybase_db) module.
@@ -46,12 +46,12 @@ seealso:
 author:
 - Florian JUDITH (@fjudith)
 extends_documentation_fragment:
-- community.sybase.sybase
+- community.freetds.freetds
 '''
 
 EXAMPLES = r'''
 - name: Simple select query to acme db
-  community.mysql.mysql_query:
+  community.freetds.freetds_query:
     login_db: acme
     query: SELECT * FROM orders
 - name: Select query to db acme with positional arguments
@@ -98,11 +98,11 @@ rowcount:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.sybase.plugins.module_utils.mysql import (
-    sybase_connect,
-    sybase_common_argument_spec,
-    sybase_driver,
-    sybase_driver_fail_msg,
+from ansible_collections.testruction.sybase.plugins.module_utils.mysql import (
+    freetds_connect,
+    freetds_common_argument_spec,
+    freetds_driver,
+    freetds_driver_fail_msg,
 )
 from ansible.module_utils._text import to_native
 
@@ -115,7 +115,7 @@ DDL_QUERY_KEYWORDS = ('CREATE', 'DROP', 'ALTER', 'RENAME', 'TRUNCATE')
 #
 
 def main():
-  argument_spec = sybase_common_argument_spec()
+  argument_spec = freetds_common_argument_spec()
   argument_spec.update(
     query=dict(type='raw', required),
     database=dict(type='str'),
@@ -160,7 +160,7 @@ def main():
     else:
         arguments = None  
     
-    if sybase_driver is None:
+    if freetds_driver is None:
         module.fail_json(msg=sybase_driver_fail_msg)
 
     # Connect to DB:

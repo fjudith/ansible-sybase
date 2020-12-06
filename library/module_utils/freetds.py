@@ -3,14 +3,25 @@ from functools import reduce
 __metaclass__ = type
 
 import os
-import pyodbc as sybase_driver
+import traceback
 
 from ansible.module_utils.six.moves import configparser
 from ansible.module_utils._text import to_native
 
-sybase_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is required.'
+freetds_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is required.'
 
-def sybase_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None, connect_timeout=30, autocommit=False):
+PYODBC_IMP_ERR = None
+try:
+    import pymssql
+except ImportError:
+    PYMSSQL_IMP_ERR = traceback.format_exc()
+    pyodbc_found = False
+else:
+    pyodbc_found = True
+
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
+
+def freetds_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None, connect_timeout=30, autocommit=False):
 
     # If login_user or login_password are given, they should override the
     # config file
@@ -36,7 +47,7 @@ def sybase_connect(module, login_user=None, login_password=None, server=None, po
             else:
                 module.fail_json(msg='To use check_hostname, pymysql >= 0.7.11 is required on the target host')
 
-    db_connection = sybase_driver.connect(
+    db_connection = freetds_driver.connect(
         driver=driver,
         server=server,
         port=port,
@@ -52,7 +63,7 @@ def sybase_connect(module, login_user=None, login_password=None, server=None, po
 
     return db_connection.cursor(), db_connection
 
-def sybase_common_argument_spec():
+def freetds_common_argument_spec():
     return dict(
         login_user=dict(type='str', default=None),
         login_password=dict(type='str', no_log=True),
