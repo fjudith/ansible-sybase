@@ -63,6 +63,10 @@ jobs:
           - pyodbc==4.0.30
         exclude:
           - sybase: 16.0
+          - sybase: 16.0.2.2
+            ansible: stable-2.10
+          - sybase: 16.0.2.2
+            ansible: devel
     steps:
       - name: Check out code
         uses: actions/checkout@v2
