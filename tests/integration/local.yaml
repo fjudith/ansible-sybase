@@ -1,0 +1,5 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+  roles:
+    - freetds_query

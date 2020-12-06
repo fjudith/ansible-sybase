@@ -1,0 +1,18 @@
+sybase:
+  user: sa
+  password: myPassword
+  port: 5000
+  database:
+    initial: master
+    test:
+      name: test_db
+      size: 24m
+      path: /tmp/test.sql
+      tables:
+        - name: test1
+        - name: test2
+        - name: test3
+      users:
+        - name: 'user1'
+          password: '1ns3cur3P4ssw0rd'
+

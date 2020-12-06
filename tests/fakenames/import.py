@@ -16,7 +16,7 @@ parser.add_argument('--pipe-delimited', help="Pipe '|' delimited file format", a
 # SQL related arguments
 parser.add_argument('-S', '--server', help='target SQL server', default=os.environ.get('FK_SERVER', default="127.0.0.1"))
 parser.add_argument('-P', '--port', help='listen port port of the SQL service', default=os.environ.get('FK_PORT', default="5000"))
-parser.add_argument('-D', '--database', help='taget SQL database', default=os.environ.get('FK_DATBASE', default="cidb"))
+parser.add_argument('-D', '--database', help='taget SQL database', default=os.environ.get('FK_DATBASE', default="fakenames"))
 parser.add_argument('-T', '--table', help='listen port port of the SQL service', default=os.environ.get('FK_TABLE', default="fakenames"))
 parser.add_argument('-u', '--username', help='to authenticate to the SQL database', default=os.environ.get('FK_USERNAME', default="sa"))
 parser.add_argument('-p', '--password', help='to access to the SQL database', default=os.environ.get('FK_PASSWORD', default="myPassword"))

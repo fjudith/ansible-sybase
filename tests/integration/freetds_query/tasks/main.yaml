@@ -1,0 +1,2 @@
+- name: ASE | Initial Query
+  import_tasks: freetds_query_initial.yaml
