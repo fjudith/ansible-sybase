@@ -1,0 +1,100 @@
+name: Plugins CI
+on:
+ push:
+  paths:
+    - 'plugins/**'
+    - 'tests/**'
+    - '.github/workflows/ansible-test-plugins.yaml'
+  pull_request:
+    paths:
+      - 'plugins/**' 
+      - 'tests/**'
+      - '.github/workflows/ansible-test-plugins.yaml'
+  schedule:
+    - cron: '0 6 * * *'
+
+env:
+  sybase_version_file: "./ansible_collections/testruction/sybase/role/sybase_ase/defaults/main.yaml"
+  
+jobs:
+  sanity:
+    name: "Sanity (Python: ${{ matrix.python }}, Ansible: ${{ matrix.ansible }})"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - stable-2.9
+          - stable-2.10
+          - devel
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/testruction/sybase
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install ansible-base (${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+      
+      - name: Run sanity tests
+        run: ansible-test sanity --docker -v --color
+        working-directory: ./ansible_collections/testruction/sybase
+  
+  integration:
+    name: "Integration (Python: ${{ matrix.python }}, Ansible: ${{ matrix.ansible }}, Sybase: ${{ matrix.mysql }}, Connector: ${{ matrix.connector }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sybase:
+          - 16.0
+          - 16.0.2.2
+        ansible:
+          - stable-2.9
+          - stable-2.10
+          - devel
+        python:
+          - 3.6
+        connector:
+          - pyodbc==4.0.30
+        exclude:
+          - sybase: 16.0
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/testruction/sybase
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      
+      - name: Install ansible-base (${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+      
+      - name: Set Sybase version (${{ matrix.sybase }})
+        run: "sed -i 's/^mysql_version:.*/mysql_version: \"${{ matrix.sybase }}\"/g' ${{ env.mysql_version_file }}"
+      
+      
+      - uses: Run sybase server
+        run: |
+          docker run -d --name sybase \
+          -p 5000:5000 \
+          docker.io/fjudith/sybase:{{ matrix.sybase }}
+      
+      - name: Run integration tests
+        run: ansible-test integration --docker -v --color --retry-on-error --continue-on-error --python ${{ matrix.python }} --diff --coverage
+        working-directory: ./ansible_collections/testruction/sybase
+      
+      - name: Generate coverage report.
+        run: ansible-test coverage xml -v --requirements --group-by command --group-by version
+        working-directory: ./ansible_collections/testruction/sybase
+      
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: false
