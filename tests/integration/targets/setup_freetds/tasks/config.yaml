@@ -4,3 +4,9 @@
     src: odbcinst.ini
     dest: /etc/odbcinst.ini
     mode: 0644
+
+- name: Configure user ODBC driver
+  copy:
+    src: odbcinst.ini
+    dest: ~/.odbc.ini
+    mode: 0644
