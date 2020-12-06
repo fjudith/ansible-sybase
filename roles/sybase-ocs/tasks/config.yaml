@@ -21,7 +21,7 @@
     url: "{{ sybase.install.client.archive_url }}"
     dest: /tmp/ASE_Suite.linuxamd64.tgz
     mode: 0644
-    checksum: "{{ sybase.install.server.archive_checksum }}"
+    checksum: "{{ sybase.install.client.archive_checksum }}"
   register: archive_url
   when: not archive_vagrant.stat.exists
 
