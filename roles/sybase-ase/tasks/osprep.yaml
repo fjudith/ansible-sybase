@@ -8,7 +8,7 @@
   become: true
   user:
     name: "{{ sybase.user }}"
-    group: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
     create_home: 'yes'
 
 # - name: Install required packages
