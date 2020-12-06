@@ -16,11 +16,11 @@ end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Populate boxes hosts file
-  # config.hostmanager.enabled = true
-  # config.hostmanager.manage_host = false
-  # config.hostmanager.manage_guest = true
-  # config.hostmanager.ignore_private_ip = false
-  # config.hostmanager.include_offline = true
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
 
   boxes.each do |boxes|
     NUMBER = 1
@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.box_version = boxes['box_version'] if boxes.key? 'box_version'
       srv.vm.box_url = boxes['box_url'] if boxes.key? 'box_url'
       srv.vm.hostname = boxes['hostname']
-      # srv.hostmanager.aliases = ["#{boxes['hostname']}.localdomain", boxes['hostname']]
+      srv.hostmanager.aliases = ["#{boxes['hostname']}.localdomain", boxes['hostname']]
       
       # Networking.  By default a NAT interface is added.
       # Add an internal network like this:
