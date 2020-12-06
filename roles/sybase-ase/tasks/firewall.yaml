@@ -4,7 +4,7 @@
     permanent: true
     state: enabled
     zone: public
-  notify: restart-firewalld
+  notify: Restart firewalld
   #when: firewall.enabled
 
 - name: Enable Sybase backup server port in Firewalld
