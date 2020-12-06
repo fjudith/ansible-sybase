@@ -40,6 +40,16 @@
   tags:
     - sap_ase_install
 
+- name: Kill dataserver processes
+  become: true
+  shell: |
+    pkill -e dataserver
+  args:
+    executable: /bin/bash
+  when: not sybase_install.stat.exists
+  tags:
+    - sap_ase_install
+
 - name: Configure Sybase interfaces
   template:
     src: interfaces.j2
