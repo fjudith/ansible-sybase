@@ -92,7 +92,20 @@
     - sap_ase_install
     - sap_ase_systemd
 
+- name: Create SA password file
+  copy:
+    dest: "{{ sybase.install.server.directory }}/.sa_password"
+    content: |
+      {{ sybase.sa_password }}
+    owner: "{{ sybase.user }}"
+    group: "{{ sybase.group }}"
+    mode: 0400
+  tags:
+    - sap_ase_install
+    - sap_ase_systemd
+
 - name: Install Sybase Systemd service
+  become: true
   template:
     src: sybase.service.j2
     dest: /etc/systemd/system/sybase.service
@@ -104,23 +117,12 @@
     - sap_ase_systemd
 
 - name: Enable Sybase Systemd service
+  become: true
   systemd:
     name: sybase.service
     enabled: yes
     masked: no
     state: started
-  tags:
-    - sap_ase_install
-    - sap_ase_systemd
-
-- name: Create SA password file
-  copy:
-    dest: "{{ sybase.install.server.directory }}/.sa_password"
-    content: |
-      {{ sybase.sa_password }}
-    owner: "{{ sybase.user }}"
-    group: "{{ sybase.group }}"
-    mode: 0400
   tags:
     - sap_ase_install
     - sap_ase_systemd
