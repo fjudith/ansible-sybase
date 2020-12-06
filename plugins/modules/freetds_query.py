@@ -135,6 +135,8 @@ def main():
     connect_timeout = module.params['connect_timeout']
     login_user = module.params['login_user']
     login_password = module.params['login_password']
+    login_host = module.params['login_host']
+    login_port = module.params['login_port']
     query = module.params["query"]
 
     if not isinstance(query, (str, list)):
