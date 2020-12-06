@@ -1,0 +1,17 @@
+namespace: testruction
+name: sybase
+version: 0.0.1
+readme: README.md
+authors:
+   - Florian JUDITH <florian.judith.b@gmail.com
+description: Sybase collection for Ansible
+license_file: COPYING
+tags:
+  - database
+  - sybase
+  - mssql
+  - freetds
+repository: https://github.com/ansible-collections/testruction.sybase
+documentation: https://github.com/ansible-collections/testruction.sybase
+homepage: https://github.com/ansible-collections/testruction.sybase
+issues: https://github.com/ansible-collections/testruction.sybase/issues
