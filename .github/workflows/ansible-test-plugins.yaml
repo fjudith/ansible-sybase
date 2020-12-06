@@ -14,7 +14,7 @@ on:
     - cron: '0 6 * * *'
 
 env:
-  sybase_version_file: "./ansible_collections/testruction/sybase/roles/sybase_ase/defaults/main.yaml"
+  sybase_version_file: "./ansible_collections/testruction/sybase/roles/sybase-ase/defaults/main.yaml"
   
 jobs:
   sanity:
