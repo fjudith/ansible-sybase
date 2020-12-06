@@ -78,8 +78,7 @@ jobs:
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       
       - name: Set Sybase version (${{ matrix.sybase }})
-        run: "sed -i 's/^mysql_version:.*/mysql_version: \"${{ matrix.sybase }}\"/g' ${{ env.mysql_version_file }}"
-      
+        run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.mysql_version_file }}"
       
       - name: Run sybase server
         run: |
