@@ -8,5 +8,18 @@
 - name: Configure user ODBC driver
   copy:
     src: odbcinst.ini
-    dest: ~/.odbc.ini
+    dest: /usr/local/etc/odbcinst.ini
     mode: 0644
+
+- name: Show odbc driver user configuration
+  shell: |
+    odbcinst -j
+  args:
+    executable: /bin/bash
+
+- name: Show odbc driver user configuration
+  become: true
+  shell: |
+    odbcinst -j
+  args:
+    executable: /bin/bash
