@@ -47,7 +47,7 @@ def freetds_connect(module, login_user=None, login_password=None,
         connection_string['encoding'] = encoding
     
     # Connect to server
-    db_connection = freetds_driver.connect(autocommit=autocommit, **connection_string)
+    db_connection = freetds_driver.connect(*connection_string, autocommit=autocommit)
 
     # Monkey patch the Connection class to close the connection when garbage collected
     def _conn_patch(conn_self):
