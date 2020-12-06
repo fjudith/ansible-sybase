@@ -81,7 +81,7 @@ jobs:
         run: "sed -i 's/^mysql_version:.*/mysql_version: \"${{ matrix.sybase }}\"/g' ${{ env.mysql_version_file }}"
       
       
-      - uses: Run sybase server
+      - name: Run sybase server
         run: |
           docker run -d --name sybase \
           -p 5000:5000 \
