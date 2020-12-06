@@ -9,7 +9,7 @@ __metaclass__ = type
 
 class ModuleDocFragment(object):
 
-    # Standard mysql documentation fragment
+    # Standard freetds documentation fragment
     DOCUMENTATION = r'''
 options:
   login_user:
@@ -23,13 +23,11 @@ options:
   login_host:
     description:
       - Host running the database.
-      - In some cases for local connections the I(login_unix_socket=/path/to/mysqld/socket),
-        that is usually C(/var/run/mysqld/mysqld.sock), needs to be used instead of I(login_host=localhost).
     type: str
     default: localhost
   login_port:
     description:
-      - Port of the MySQL server. Requires I(login_host) be defined as other than localhost if login_port is used.
+      - Port of the Sybase server. Requires I(login_host) be defined as other than localhost if login_port is used.
     type: int
     default: 5000
   connect_timeout:
@@ -37,27 +35,25 @@ options:
       - The connection timeout when connecting to the MySQL server.
     type: int
     default: 30
+  encoding:
+    description:
+      - The ODBC connection string must be sent to the driver as a byte sequence, hence the Python string must first be encoded using the named encoding
+        see U(https://docs.python.org/3/library/codecs.html#standard-encodings)
+    type: str
+    default: utf-16le
 requirements:
-   - myodbc (Python 2.7 and Python 3.X)
+   - pyodbc (Python 2.7 and Python 3.X)
 notes:
    - Requires the PyODBC (Python 2.7 and Python 3.X) package installed on the remote host.
      The Python package may be installed with apt-get install freetds-dev freetds-bin unixodbc-dev tdsodbc (Ubuntu; see M(ansible.builtin.apt)) or
      yum install unixODBC unixODBC-devel freetds freetds-devel (RHEL/CentOS/Fedora; see M(ansible.builtin.yum)). You can also use dnf install python2-PyMySQL
      for newer versions of Fedora; see M(ansible.builtin.dnf).
-   - Be sure you have PyMySQL or MySQLdb library installed on the target machine
+   - Be sure you have pyodbc or pymssl library installed on the target machine
      for the Python interpreter Ansible uses, for example, if it is Python 3,
      you must install the library for Python 3. You can also change the interpreter.
      For more information, see U(https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html).
    - Both C(login_password) and C(login_user) are required when you are
      passing credentials. If none are present, the module will attempt to read
-     the credentials from C(~/.my.cnf), and finally fall back to using the MySQL
-     default login of 'root' with no password.
-   - If there are problems with local connections, using I(login_unix_socket=/path/to/mysqld/socket)
-     instead of I(login_host=localhost) might help. As an example, the default MariaDB installation of version 10.4
-     and later uses the unix_socket authentication plugin by default that
-     without using I(login_unix_socket=/var/run/mysqld/mysqld.sock) (the default path)
-     causes the error ``Host '127.0.0.1' is not allowed to connect to this MariaDB server``.
-   - Alternatively, you can use the mysqlclient library instead of MySQL-python (MySQLdb)
-     which supports both Python 2.X and Python >=3.5.
-     See U(https://pypi.org/project/mysqlclient/) how to install it.
+     the credentials from C(~/.odbc.ini), and finally fall back to using the MSSQL/Sybase
+     default login of 'sa' with no password.
 '''
