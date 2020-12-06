@@ -45,7 +45,7 @@ jobs:
         working-directory: ./ansible_collections/testruction/sybase
   
   integration:
-    name: "Integration (Python: ${{ matrix.python }}, Ansible: ${{ matrix.ansible }}, Sybase: ${{ matrix.mysql }}, Connector: ${{ matrix.connector }})"
+    name: "Integration (Python: ${{ matrix.python }}, Ansible: ${{ matrix.ansible }}, Sybase: ${{ matrix.sybase }}, Connector: ${{ matrix.connector }})"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -82,7 +82,7 @@ jobs:
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       
       - name: Set Sybase version (${{ matrix.sybase }})
-        run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.mysql_version_file }}"
+        run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.sybase_version_file }}"
       
       - name: Run sybase server
         run: |
