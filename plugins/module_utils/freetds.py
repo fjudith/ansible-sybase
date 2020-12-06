@@ -64,7 +64,7 @@ def freetds_common_argument_spec():
         login_password=dict(type='str', no_log=True),
         login_host=dict(type='str', default='localhost'),
         login_port=dict(type='int', default=5000),
-        odbc_driver=dict(type='str', default=['FreeTDS'])
+        odbc_driver=dict(type='str', default=['FreeTDS']),
         connect_timeout=dict(type='int', default=30),
         encoding=dict(type='str', default='utf-16le'),
     )
