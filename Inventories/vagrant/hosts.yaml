@@ -1,7 +1,7 @@
 ---
 bastion:
   hosts:
-    bastion.local:
+    bastion.vagrant:
       ansible_host: 127.0.0.1
       ansible_port: 42222
   vars:
@@ -10,7 +10,7 @@ bastion:
 
 database:
   hosts:
-    database.local:
+    database.vagrant:
       ansible_host: 127.0.0.1
       ansible_port: 52222
   vars:

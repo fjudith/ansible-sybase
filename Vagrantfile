@@ -15,6 +15,13 @@ def serverIP(num)
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Populate boxes hosts file
+  # config.hostmanager.enabled = true
+  # config.hostmanager.manage_host = false
+  # config.hostmanager.manage_guest = true
+  # config.hostmanager.ignore_private_ip = false
+  # config.hostmanager.include_offline = true
+
   boxes.each do |boxes|
     NUMBER = 1
     config.vm.define boxes['name'] do |srv|
@@ -23,7 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.box_version = boxes['box_version'] if boxes.key? 'box_version'
       srv.vm.box_url = boxes['box_url'] if boxes.key? 'box_url'
       srv.vm.hostname = boxes['hostname']
-
+      # srv.hostmanager.aliases = ["#{boxes['hostname']}.localdomain", boxes['hostname']]
+      
       # Networking.  By default a NAT interface is added.
       # Add an internal network like this:
       #   srv.vm.network 'private_network', type: 'dhcp', virtualbox__intnet: true
@@ -36,9 +44,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
       end
 
-      # if boxes['ssh_port']
-      #   srv.vm.network :forwarded_port, guest: 22, host: boxes['ssh_port'], host_ip: '127.0.0.1', id: 'ssh'
-      # end
+      # Set private network insterface
+      srv.vm.network :private_network, ip: serverIP(NUMBER)
 
       # Copy software packages to tmp
       if boxes['forward_port']
@@ -46,9 +53,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.network :forwarded_port, guest: forwarded['port'], host: forwarded['expose'], host_ip: '127.0.0.1', id: forwarded['name']
         end
       end
-
-      # Set private network insterface
-      srv.vm.network :private_network, ip: serverIP(NUMBER)
 
       # VirtualBox
       srv.vm.provider 'virtualbox' do |vb|
@@ -69,8 +73,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Copy cloud-init files to tmp and provision
       if boxes['provision']
-        srv.vm.provision :file, :source => boxes['provision']['meta-data'], :destination => '/tmp/vagrant/cloud-init/nocloud/meta-data'
-        srv.vm.provision :file, :source => boxes['provision']['user-data'], :destination => '/tmp/vagrant/cloud-init/nocloud/user-data'
+        srv.vm.provision :file, :source => boxes['provision']['meta-data'], :destination => '/tmp/vagrant/cloud-init/nocloud-net/meta-data'
+        srv.vm.provision :file, :source => boxes['provision']['user-data'], :destination => '/tmp/vagrant/cloud-init/nocloud-net/user-data'
         srv.vm.provision :shell, :path => boxes['provision']['cloud-init'], :args => boxes['name']
       end
       
@@ -85,12 +89,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         rsync__exclude: ['.vagrant/', '.vscode/', '.git/']
         
         srv.vm.provision "ansible_local" do |ansible|
+          ansible.verbose="vvv"
           ansible.become = true
           ansible.verbose = true
           ansible.playbook = boxes['ansible']['playbook']
           ansible.galaxy_roles_path = '/vagrant/roles'
           ansible.galaxy_role_file = "requirements.yaml"
-          ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3", ansible_stdout_callback: "debug"}
+          # ansible.install_mode = "pip3_args_only"
+          # ansible.pip_args = "-r requirements.txt"
+          # ansible.extra_vars = {
+          #   ansible_python_interpreter: "/usr/bin/env python3",
+          #   ansible_stdout_callback: "debug"
+          # }
         end
       
       else

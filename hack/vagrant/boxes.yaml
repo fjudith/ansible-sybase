@@ -1,9 +1,9 @@
 ---
 - name: database
-  hostname: database.local
+  hostname: database.vagrant
   description: Sybase Database server
   box: generic/centos7
-  box_version: "3.1.10"
+  box_version: "3.1.12"
   paravirtprovider: hyperv
   cpus: 2
   memory: 4096
@@ -15,17 +15,17 @@
       port: 5000
       expose: 5000
   provision:
-    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
-    user-data: ./hack/cloud-init/nocloud/user-data_database.yaml
+    meta-data: ./hack/cloud-init/nocloud-net/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud-net/user-data_database.yaml
     cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   ansible:
     playbook: ./hack/vagrant/playbook_database.yaml
 
 - name: bastion
-  hostname: bastion.local
+  hostname: bastion.vagrant
   description: Bastion server
   box: generic/centos7
-  box_version: "3.1.10"
+  box_version: "3.1.12"
   paravirtprovider: hyperv
   cpus: 1
   memory: 1024
@@ -34,8 +34,8 @@
       port: 22
       expose: 42222
   provision:
-    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
-    user-data: ./hack/cloud-init/nocloud/user-data_bastion.yaml
+    meta-data: ./hack/cloud-init/nocloud-net/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud-net/user-data_bastion.yaml
     cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   ansible:
     playbook: ./hack/vagrant/playbook_bastion.yaml

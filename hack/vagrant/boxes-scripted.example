@@ -1,6 +1,6 @@
 ---
 - name: database
-  hostname: database.local
+  hostname: database.vagrant
   description: Sybase Database server
   box: generic/centos7
   box_version: "3.1.8"
@@ -13,8 +13,8 @@
       port: 22
       expose: 42222
   provision:
-    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
-    user-data: ./hack/cloud-init/nocloud/user-data_database.yaml
+    meta-data: ./hack/cloud-init/nocloud-net/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud-net/user-data_database.yaml
     cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   packages:
     - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz
@@ -30,7 +30,7 @@
   install: ./hack/vagrant/scripts/install-ASE.sh
 
 - name: bastion
-  hostname: bastion.local
+  hostname: bastion.vagrant
   description: Bastion server
   box: generic/centos7
   box_version: "3.1.8"
@@ -46,8 +46,8 @@
       port: 5000
       expose: 5000
   provision:
-    meta-data: ./hack/cloud-init/nocloud/meta-data.yaml
-    user-data: ./hack/cloud-init/nocloud/user-data_bastion.yaml
+    meta-data: ./hack/cloud-init/nocloud-net/meta-data.yaml
+    user-data: ./hack/cloud-init/nocloud-net/user-data_bastion.yaml
     cloud-init: ./hack/vagrant/scripts/cloud-init.sh
   packages:
     - ./hack/vagrant/packages/ASE_Suite.linuxamd64.tgz

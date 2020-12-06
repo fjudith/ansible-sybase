@@ -1,21 +1,17 @@
-- name: Disable firewalld
-  service:
-    name: firewalld
-    state: stopped
-    enabled: no
+- name: Enable Sybase server port in Firewalld
+  firewalld:
+    port: "{{ sybase.networking.port }}/tcp"
+    permanent: true
+    state: enabled
+    zone: public
+  notify: restart-firewalld
+  #when: firewall.enabled
 
-# - name: Enable Sybase server port in Firewalld
-#   firewalld:
-#     port: "{{ sybase.networking.port }}/tcp"
-#     permanent: true
-#     state: enabled
-#     zone: public
-#   notify: restart-firewalld
-
-# - name: Enable Sybase backup server port in Firewalld
-#   firewalld:
-#     port: "{{ sybase.networking.backup_port }}/tcp"
-#     permanent: true
-#     state: enabled
-#     zone: public
-#   notify: restart-firewalld
+- name: Enable Sybase backup server port in Firewalld
+  firewalld:
+    port: "{{ sybase.networking.backup_port }}/tcp"
+    permanent: true
+    state: enabled
+    zone: public
+  notify: Reload firewall rules
+  #when: firewall.enabled

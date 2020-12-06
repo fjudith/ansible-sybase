@@ -22,7 +22,7 @@ sybase:
       features: 'fopen_client,fdblib,fjconnect70,fsysam_util,fscc_server,fasemap,fase_snmp_agent'
   networking:
     # Sybase listen ports
-    interface: '0.0.0.0'
+    interface: 'database.local'
     port: '5000'
     backup_port: '5001'
     # Name of the database server to add in the ${SYBASE}/interfaces 

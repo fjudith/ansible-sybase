@@ -1,0 +1,10 @@
+firewall:
+  enabled: true
+  zones:
+    - zone: trusted
+      interface: eth1
+  rules:
+    - zone: trusted
+      service: mdns
+    - zone: public
+      service: mdns

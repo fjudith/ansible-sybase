@@ -48,7 +48,11 @@ packages:
   - python3-pip
   - python3-setuptools
   - libselinux-python3
-
+  # Python 2
+  - python
+  - python-pip
+  - python-setuptools
+  - libselinux-python
 runcmd:
   # Install Ansible
   - ['/usr/bin/pip3', 'install', 'ansible==2.9']

@@ -4,7 +4,7 @@ resource "virtualbox_vm" "bastion" {
   image     = var.bastion_image
   cpus      = var.bastion_cpu
   memory    = var.bastion_memory + " mib"
-  user_data = file("../../../cloud-init/nocloud/user-data_bastion.yaml")
+  user_data = file("../../../cloud-init/nocloud-net/user-data_bastion.yaml")
 
   network_adapter {
     type           = "hostonly"
@@ -18,7 +18,7 @@ resource "virtualbox_vm" "database" {
   image     = var.database_image
   cpus      = var.database_cpu
   memory    = var.database_memory + " mib"
-  user_data = file("../../../cloud-init/nocloud/user-data_database.yaml")
+  user_data = file("../../../cloud-init/nocloud-net/user-data_database.yaml")
 
   network_adapter {
     type           = "hostonly"

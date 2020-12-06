@@ -1,6 +1,8 @@
 - hosts: bastion
   gather_facts: false
+  vars:
   roles:
+    - common-firewall
     - sybase-ocs
     - openjdk-8
     - liquibase

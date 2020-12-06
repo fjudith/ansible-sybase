@@ -1,0 +1,34 @@
+- name: Manage firewalld service
+  systemd:
+    name: firewalld
+    state: "{{ firewall.enabled | ternary('started','stopped') }}"
+    enabled: "{{ firewall.enabled }}"
+  tags:
+    - common
+    - firewall
+
+- name: Configure firewalld zones
+  firewalld:
+    zone: "{{ item.zone|default('public') }}"
+    permanent: "{{ item.permanent|default('yes') }}"
+    interface: "{{ item.interface }}"
+    state: "{{ item.state|default('enabled') }}"
+  loop: "{{ firewall.zones }}"
+  when: firewall.enabled
+  notify: Reload firewall rules
+  tags:
+    - common
+    - firewall
+
+- name: Configure firewalld rules
+  firewalld:
+    zone: "{{ item.zone|default('public') }}"
+    permanent: "{{ item.permanent|default('yes') }}"
+    service: "{{ item.service }}"
+    state: "{{ item.state|default('enabled') }}"
+  loop: "{{ firewall.rules }}"
+  when: firewall.enabled
+  notify: Reload firewall rules
+  tags:
+    - common
+    - firewall

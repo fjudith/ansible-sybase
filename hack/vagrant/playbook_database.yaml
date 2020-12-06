@@ -1,4 +1,5 @@
 - hosts: database
   gather_facts: false
   roles:
+    - common-firewall
     - sybase-ase
