@@ -2,3 +2,5 @@
 .vagrant
 **/.vagrant
 hack/vagrant/packages/*.tgz
+roles/freetds/defaults/main.yaml
+roles/freetds/tasks/main.yaml
