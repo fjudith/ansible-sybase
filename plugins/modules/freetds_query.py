@@ -167,14 +167,10 @@ def main():
 
     # Connect to DB:
     try:
-        cursor, db_connection = freetds_connect(module,
-                                    login_user=login_user,
-                                    login_password=login_password,
-                                    login_host=login_host,
-                                    login_port=login_port,
-                                    login_db=db,
-                                    autocommit=autocommit
-                                )
+        cursor, db_connection = freetds_connect(module, login_user, login_password,
+                                                login_host, login_port, db,
+                                                connect_timeout=connect_timeout,
+                                                autocommit=autocommit)
     except Exception as e:
         module.fail_json(msg="unable to connect to database, check login_user and "
                              "login_password are correct."
