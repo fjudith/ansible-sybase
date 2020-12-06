@@ -26,38 +26,49 @@ def freetds_connect(module, login_user=None, login_password=None,
                     login_host=None, login_port=None, db=None,
                     connect_timeout=30, autocommit=False, encoding='utf-16le', odbc_driver='FreeTDS'):
     
-    config = {}
+    connection_string= {}
     
-    config['server'] = login_host
-    config['port'] = login_port
+    connection_string['server'] = login_host
+    connection_string['port'] = login_port
 
     # If login_user or login_password are given, they should override the
     # config file
     if odbc_driver is not None:
-        config['driver'] = odbc_driver
+        connection_string['driver'] = odbc_driver
     if login_user is not None:
-        config['uid'] = login_user
+        connection_string['uid'] = login_user
     if login_password is not None:
-        config['pwd'] = login_password
+        connection_string['pwd'] = login_password
     if db is not None:
-        config['database'] = db
+        connection_string['database'] = db
     if connect_timeout is not None:
-        config['timeout'] = connect_timeout
+        connection_string['timeout'] = connect_timeout
     if encoding is not None:
-        config['encoding'] = encoding
+        connection_string['encoding'] = encoding
+    # connection_string='DRIVER={0};SERVER={1};PORT={2};UID={3};PWD={4}'.format(
+    #     odbc_driver,
+    #     login_host,
+    #     login_port,
+    #     login_user,
+    #     login_password,
+    # )
 
     # Connect to server
-    db_connection = freetds_driver.connect(**config, autocommit=autocommit)
-    #valid
-    # db_connection = freetds_driver.connect(
-    #     driver=odbc_driver,
-    #     server=login_host,
-    #     port=login_port,
-    #     uid=login_user,
-    #     pwd=login_password,
-    #     timeout=connect_timeout,
-    #     autocommit=autocommit
-    # )
+    # db_connection = freetds_driver.connect(**connection_string, autocommit=autocommit)
+    db_connection = freetds_driver.connect(
+        driver=odbc_driver,
+        server=login_host,
+        port=login_port,
+        uid=login_user,
+        pwd=login_password,
+        timeout=connect_timeout,
+        autocommit=autocommit,
+    )
+    # Monkey patch the Connection class to close the connection when garbage collected
+    # def _conn_patch(conn_self):
+    #     conn_self.close()
+    # db_connection.__class__.__del__ = _conn_patch
+    # # Patched
 
     return db_connection.cursor(), db_connection
 
@@ -73,13 +84,7 @@ def freetds_common_argument_spec():
         encoding=dict(type='str', default='utf-16le'),
     )
 
-# Debug
-# if __name__ == '__main__':
-#     cursor, db_connection = freetds_connect(
-#         'test', 'sa', 'myPassword', '127.0.0.1', 5000, 'master'
-#     )
-#     cursor.execute("SELECT @@version") 
-#     row = cursor.fetchone() 
-#     while row: 
-#         print(row[0])
-#         row = cursor.fetchone()
+if __name__ == '__main__':
+    freetds_connect(
+        'test', 'sa', 'myPassword', '127.0.0.1', 5000, 'master'
+    )
