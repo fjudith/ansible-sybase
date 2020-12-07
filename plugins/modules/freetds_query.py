@@ -131,7 +131,7 @@ def main():
         ),
     )
 
-    db = module.param['login_db']
+    db = module.params['login_db']
     connect_timeout = module.params['connect_timeout']
     login_user = module.params['login_user']
     login_password = module.params['login_password']
