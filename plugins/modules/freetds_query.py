@@ -165,11 +165,18 @@ def main():
 
     # Connect to DB:
     try:
-        cursor, db_connection = freetds_connect(module, login_user, login_password, db, cursor_class='DictCursor', autocommit=autocommit)
+        cursor, db_connection = freetds_connect(module,
+                                    login_user=login_user,
+                                    login_password=login_password,
+                                    login_host=login_host,
+                                    login_port=login_port,
+                                    login_db=db,
+                                    autocommit=autocommit
+                                )
     except Exception as e:
         module.fail_json(msg="unable to connect to database, check login_user and "
-                             "login_password are correct or %s has the credentials. "
-                             "Exception message: %s" % (config_file, to_native(e)))
+                             "login_password are correct."
+                             "Exception message: %s" % (to_native(e)))
 
     # Set defaults:
     changed = False
