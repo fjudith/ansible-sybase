@@ -86,7 +86,7 @@ jobs:
       - name: Set Sybase version (${{ matrix.sybase }})
         run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.sybase_version_file }}"
 
-     - name: Set Connector version (${{ matrix.connector }})
+      - name: Set Connector version (${{ matrix.connector }})
         run: "sed -i 's/^python_packages:.*/python_packages: [${{ matrix.connector }}]/' ${{ env.connector_version_file }}"
 
       - name: Run sybase server
