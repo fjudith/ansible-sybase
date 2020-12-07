@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from functools import reduce
+
 __metaclass__ = type
 
 import os
@@ -21,23 +22,29 @@ else:
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 
-def freetds_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None, connect_timeout=30, autocommit=False):
 
+def freetds_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None,
+                    connect_timeout=30, autocommit=False):
+    
+    # Connect to server
     db_connection = freetds_driver.connect(
         driver=driver,
         server=server,
         port=port,
         uid=login_user,
-        pwd=login_password
+        pwd=login_password,
+        connect_timeout=connect_timeout
     )
 
     # Monkey patch the Connection class to close the connection when garbage collected
     def _conn_patch(conn_self):
         conn_self.close()
+
     db_connection.__class__.__del__ = _conn_patch
     # Patched
 
     return db_connection.cursor(), db_connection
+
 
 def freetds_common_argument_spec():
     return dict(
