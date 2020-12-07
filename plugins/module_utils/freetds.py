@@ -23,8 +23,8 @@ else:
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 
 
-def freetds_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None,
-                    connect_timeout=30, autocommit=False):
+def freetds_connect(module, login_user=None, login_password=None, server=None, port=None,
+                    driver='FreeTDS', connect_timeout=30, autocommit=False):
     
     # Connect to server
     db_connection = freetds_driver.connect(
@@ -33,7 +33,7 @@ def freetds_connect(module, login_user=None, login_password=None, server=None, p
         port=port,
         uid=login_user,
         pwd=login_password,
-        connect_timeout=connect_timeout
+        connect_timeout=connect_timeout,
     )
 
     # Monkey patch the Connection class to close the connection when garbage collected
