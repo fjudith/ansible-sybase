@@ -118,7 +118,7 @@ def main():
     argument_spec = freetds_common_argument_spec()
     argument_spec.update(
         query=dict(type='raw', required=True),
-        database=dict(type='str'),
+        login_db=dict(type='str'),
         positional_args=dict(type='list'),
         named_args=dict(type='dict'),
         single_transaction=dict(type='bool', default=False),

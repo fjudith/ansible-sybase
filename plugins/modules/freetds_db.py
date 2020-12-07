@@ -92,7 +92,7 @@ options:
     version_added: '0.1.0'
   dump_extra_args:
     description:
-      - Provide additional arguments for mysqldump.
+      - Provide additional arguments for bcp.
         Used when I(state=dump) only, ignored otherwise.
     type: str
     version_added: '0.1.0'
@@ -120,7 +120,7 @@ options:
       - Read only passed I(config_file).
       - When I(state) is C(dump) or C(import),
         by default the module passes I(config_file) parameter
-        using C(--defaults-extra-file) command-line argument to C(mysql/mysqldump) utilities
+        using C(--defaults-extra-file) command-line argument to C(sybase/bcp) utilities
         under the hood that read named option file in addition to usual option files.
       - If this behavior is undesirable, use C(yes) to read only named option file.
     type: bool
@@ -128,7 +128,7 @@ options:
     version_added: '0.1.0'
   check_implicit_admin:
     description:
-      - Check if mysql allows login as root/nopassword before trying supplied credentials.
+      - Check if sybase allows login as sa/nopassword before trying supplied credentials.
       - If success, passed I(login_user)/I(login_password) will be ignored.
     type: bool
     default: no
@@ -144,14 +144,14 @@ options:
     version_added: '0.1.0'
 
 seealso:
-- module: community.mysql.mysql_info
-- module: community.mysql.mysql_variables
-- module: community.mysql.mysql_user
-- module: community.mysql.mysql_replication
-- name: MySQL command-line client reference
+- module: dbops.sybase.freetds_info
+- module: dbops.sybase.freetds_variables
+- module: dbops.sybase.freetds_user
+- module: dbops.sybase.freetds_replication
+- name: Sybase command-line client reference
   description: Complete reference of the MySQL command-line client documentation.
-  link: https://dev.mysql.com/doc/refman/8.0/en/mysql.html
-- name: mysqldump reference
+  link: https://help.sap.com/viewer/e0d4539d39c34f52ae9ef822c2060077/16.0.2.9/en-US
+- name: bcp reference
   description: Complete reference of the ``mysqldump`` client utility documentation.
   link: https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html
 - name: CREATE DATABASE reference
