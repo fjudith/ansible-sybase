@@ -98,7 +98,7 @@ rowcount:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.testruction.sybase.plugins.module_utils.mysql import (
+from ansible_collections.testruction.sybase.plugins.module_utils.freetds import (
     freetds_connect,
     freetds_common_argument_spec,
     freetds_driver,
@@ -115,30 +115,30 @@ DDL_QUERY_KEYWORDS = ('CREATE', 'DROP', 'ALTER', 'RENAME', 'TRUNCATE')
 #
 
 def main():
-  argument_spec = freetds_common_argument_spec()
-  argument_spec.update(
-    query=dict(type='raw', required),
-    database=dict(type='str'),
-    positional_args=dict(type='list'),
-    named_args=dict(type='dict'),
-    single_transaction=dict(type='bool', default=False),
-  )
+    argument_spec = freetds_common_argument_spec()
+    argument_spec.update(
+        query=dict(type='raw', required),
+        database=dict(type='str'),
+        positional_args=dict(type='list'),
+        named_args=dict(type='dict'),
+        single_transaction=dict(type='bool', default=False),
+    )
 
-  module = AnsibleModule(
-    argument_spec=argument_spec,
-    mutually_exclusive=(
-      ('positionnal_args', 'named_args'), 
-    ),
-  )
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        mutually_exclusive=(
+        ('positionnal_args', 'named_args'), 
+        ),
+    )
 
-  login_db = module.param['login_db']
-  connect_timeout = module.params['connect_timeout']
-  login_user = module.params['login_user']
-  login_password = module.params['login_password']
-  query = module.params["query"]
+    login_db = module.param['login_db']
+    connect_timeout = module.params['connect_timeout']
+    login_user = module.params['login_user']
+    login_password = module.params['login_password']
+    query = module.params["query"]
 
-  if not isinstance(query, (str, list)):
-        module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
+    if not isinstance(query, (str, list)):
+            module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
 
     if isinstance(query, str):
         query = [query]
