@@ -13,7 +13,7 @@ description:
 - Runs arbitrary FreeTDS queries.
 - Pay attention, the module does not support check mode!
   All queries will be executed in autocommit mode.
-- To run SQL queries from a file, use M(community.sybase.sybase_db) module.
+- To run SQL queries from a file, use M(dbops.sybase.freetds_db) module.
 version_added: '0.1.0'
 options:
   query:
@@ -42,7 +42,7 @@ options:
     type: bool
     default: no
 seealso:
-- module: community.sybase.sybase_db
+- module: dbops.sybase.freetds_db
 author:
 - Florian JUDITH (@fjudith)
 extends_documentation_fragment:
@@ -55,21 +55,21 @@ EXAMPLES = r'''
     login_db: acme
     query: SELECT * FROM orders
 - name: Select query to db acme with positional arguments
-  community.mysql.mysql_query:
+  dbops.sybase.freetds_query:
     login_db: acme
     query: SELECT * FROM acme WHERE id = %s AND story = %s
     positional_args:
     - 1
     - test
 - name: Select query to test_db with named_args
-  community.mysql.mysql_query:
+  dbops.sybase.freetds_query:
     login_db: test_db
     query: SELECT * FROM test WHERE id = %(id_val)s AND story = %(story_val)s
     named_args:
       id_val: 1
       story_val: test
 - name: Run several insert queries against db test_db in single transaction
-  community.mysql.mysql_query:
+  dbops.sybase.freetds_query:
     login_db: test_db
     query:
     - INSERT INTO articles (id, story) VALUES (2, 'my_long_story')
@@ -98,7 +98,7 @@ rowcount:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.testruction.sybase.plugins.module_utils.freetds import (
+from ansible_collections.dbops.sybase.plugins.module_utils.freetds import (
     freetds_connect,
     freetds_common_argument_spec,
     freetds_driver,
@@ -117,7 +117,7 @@ DDL_QUERY_KEYWORDS = ('CREATE', 'DROP', 'ALTER', 'RENAME', 'TRUNCATE')
 def main():
     argument_spec = freetds_common_argument_spec()
     argument_spec.update(
-        query=dict(type='raw', required),
+        query=dict(type='raw', required=True),
         database=dict(type='str'),
         positional_args=dict(type='list'),
         named_args=dict(type='dict'),
@@ -127,18 +127,18 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=(
-        ('positionnal_args', 'named_args'), 
+            ('positionnal_args', 'named_args'), 
         ),
     )
 
-    login_db = module.param['login_db']
+    db = module.param['login_db']
     connect_timeout = module.params['connect_timeout']
     login_user = module.params['login_user']
     login_password = module.params['login_password']
     query = module.params["query"]
 
     if not isinstance(query, (str, list)):
-            module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
+        module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
 
     if isinstance(query, str):
         query = [query]
@@ -161,15 +161,78 @@ def main():
         arguments = None  
     
     if freetds_driver is None:
-        module.fail_json(msg=sybase_driver_fail_msg)
+        module.fail_json(msg=freetds_driver_fail_msg)
 
     # Connect to DB:
     try:
-        cursor, db_connection = sybase_connect(module, login_user, login_password,
-                                              db,
-
-                                              cursor_class='DictCursor', autocommit=autocommit)
+        cursor, db_connection = freetds_connect(module, login_user, login_password, db, cursor_class='DictCursor', autocommit=autocommit)
     except Exception as e:
         module.fail_json(msg="unable to connect to database, check login_user and "
                              "login_password are correct or %s has the credentials. "
                              "Exception message: %s" % (config_file, to_native(e)))
+
+    # Set defaults:
+    changed = False
+
+    max_keyword_len = len(max(DML_QUERY_KEYWORDS + DDL_QUERY_KEYWORDS, key=len))
+
+    # Execute query:
+    query_result = []
+    executed_queries = []
+    rowcount = []
+
+    for q in query:
+        try:
+            cursor.execute(q, arguments)
+
+        except Exception as e:
+            if not autocommit:
+                db_connection.rollback()
+
+            cursor.close()
+            module.fail_json(msg="Cannot execute SQL '%s' args [%s]: %s" % (q, arguments, to_native(e)))
+
+        try:
+            query_result.append([dict(row) for row in cursor.fetchall()])
+
+        except Exception as e:
+            if not autocommit:
+                db_connection.rollback()
+
+            module.fail_json(msg="Cannot fetch rows from cursor: %s" % to_native(e))
+
+        # Check DML or DDL keywords in query and set changed accordingly:
+        q = q.lstrip()[0:max_keyword_len].upper()
+        for keyword in DML_QUERY_KEYWORDS:
+            if keyword in q and cursor.rowcount > 0:
+                changed = True
+
+        for keyword in DDL_QUERY_KEYWORDS:
+            if keyword in q:
+                changed = True
+
+        try:
+            executed_queries.append(cursor._last_executed)
+        except AttributeError:
+          # MySQLdb removed cursor._last_executed as a duplicate of cursor._executed
+          executed_queries.append(cursor._executed)
+        rowcount.append(cursor.rowcount)
+
+    # When the module run with the single_transaction == True:
+    if not autocommit:
+        db_connection.commit()
+
+    # Create dict with returned values:
+    kw = {
+        'changed': changed,
+        'executed_queries': executed_queries,
+        'query_result': query_result,
+        'rowcount': rowcount,
+    }
+
+    # Exit:
+    module.exit_json(**kw)
+
+
+if __name__ == '__main__':
+    main()

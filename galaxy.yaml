@@ -1,4 +1,4 @@
-namespace: testruction
+namespace: dbops
 name: sybase
 version: 0.0.1
 readme: README.md
@@ -11,7 +11,7 @@ tags:
   - sybase
   - mssql
   - freetds
-repository: https://github.com/ansible-collections/testruction.sybase
-documentation: https://github.com/ansible-collections/testruction.sybase
-homepage: https://github.com/ansible-collections/testruction.sybase
-issues: https://github.com/ansible-collections/testruction.sybase/issues
+repository: https://github.com/ansible-collections/dbops.sybase
+documentation: https://github.com/ansible-collections/dbops.sybase
+homepage: https://github.com/ansible-collections/dbops.sybase
+issues: https://github.com/ansible-collections/dbops.sybase/issues

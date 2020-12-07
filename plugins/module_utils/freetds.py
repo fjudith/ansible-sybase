@@ -12,9 +12,9 @@ freetds_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is requ
 
 PYODBC_IMP_ERR = None
 try:
-    import pymssql
+    import pytodbc as freetds_driver
 except ImportError:
-    PYMSSQL_IMP_ERR = traceback.format_exc()
+    PYODBC_IMP_ERR = traceback.format_exc()
     pyodbc_found = False
 else:
     pyodbc_found = True
@@ -23,35 +23,11 @@ from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 
 def freetds_connect(module, login_user=None, login_password=None, server=None, port=None, driver=None, connect_timeout=30, autocommit=False):
 
-    # If login_user or login_password are given, they should override the
-    # config file
-    if login_user is not None:
-        config['user'] = login_user
-    if login_password is not None:
-        config['passwd'] = login_password
-    if ssl_cert is not None:
-        config['ssl']['cert'] = ssl_cert
-    if ssl_key is not None:
-        config['ssl']['key'] = ssl_key
-    if ssl_ca is not None:
-        config['ssl']['ca'] = ssl_ca
-    if db is not None:
-        config['db'] = db
-    if connect_timeout is not None:
-        config['connect_timeout'] = connect_timeout
-    if check_hostname is not None:
-        if mysql_driver.__name__ == "pyodbc":
-            version_tuple = (n for n in mysql_driver.__version__.split('.') if n != 'None')
-            if reduce(lambda x, y: int(x) * 100 + int(y), version_tuple) >= 711:
-                config['ssl']['check_hostname'] = check_hostname
-            else:
-                module.fail_json(msg='To use check_hostname, pymysql >= 0.7.11 is required on the target host')
-
     db_connection = freetds_driver.connect(
         driver=driver,
         server=server,
         port=port,
-        uid=login_user
+        uid=login_user,
         pwd=login_password
     )
 
