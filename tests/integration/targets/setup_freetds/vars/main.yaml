@@ -18,6 +18,4 @@ yum_install_packages:
   - freetds
   - freetds-devel
 
-python_packages:
-  - pyodbc==4.0.30
-  - pymssql==2.1.5
+python_packages: [pyodbc==4.0.30, pymssql==2.1.5]
