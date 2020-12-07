@@ -3,12 +3,16 @@
   apt:
     name: "{{ apt_install_python_prereqs }}"
     state: present
+  when:
+  - ansible_distribution in ["Debian","Ubuntu"]
 
 - name: Install FreeTDS required packages
   become: true
   apt:
     name: "{{ apt_install_packages }}"
     state: present
+  when:
+  - ansible_distribution in ["Debian","Ubuntu"]
 
 - name: Install Python prerequisits
   become: true
