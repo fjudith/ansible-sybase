@@ -15,6 +15,7 @@ on:
 
 env:
   sybase_version_file: "./ansible_collections/dbops/sybase/roles/sybase-ase/defaults/main.yaml"
+  connector_version_file: "./ansible_collections/dbops/sybase/tests/integration/targets/setup_mysql/vars/main.yml"
   
 jobs:
   sanity:
@@ -61,6 +62,7 @@ jobs:
           - 3.6
         connector:
           - pyodbc==4.0.30
+          - pymssql==2.1.5
         exclude:
           - sybase: 16.0
           - sybase: 16.0.2.2
@@ -83,7 +85,10 @@ jobs:
       
       - name: Set Sybase version (${{ matrix.sybase }})
         run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.sybase_version_file }}"
-      
+
+     - name: Set Connector version (${{ matrix.connector }})
+        run: "sed -i 's/^python_packages:.*/python_packages: [${{ matrix.connector }}]/' ${{ env.connector_version_file }}"
+
       - name: Run sybase server
         run:  docker run -d --name sybase -p 5000:5000 docker.io/fjudith/sybase:${{ matrix.sybase }}
       
