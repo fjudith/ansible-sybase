@@ -23,14 +23,14 @@ else:
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 
 
-def freetds_connect(module, login_user=None, login_password=None, server=None, port=None,
+def freetds_connect(module, login_user=None, login_password=None, login_host=None, login_port=None,
                     driver='FreeTDS', connect_timeout=30, autocommit=False):
     
     # Connect to server
     db_connection = freetds_driver.connect(
         driver=driver,
-        server=server,
-        port=port,
+        server=login_host,
+        port=login_port,
         uid=login_user,
         pwd=login_password,
         connect_timeout=connect_timeout,
