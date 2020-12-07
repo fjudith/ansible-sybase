@@ -12,7 +12,7 @@ freetds_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is requ
 
 PYODBC_IMP_ERR = None
 try:
-    import pytodbc as freetds_driver
+    import pyodbc as freetds_driver
 except ImportError:
     PYODBC_IMP_ERR = traceback.format_exc()
     pyodbc_found = False
