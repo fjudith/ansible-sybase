@@ -33,7 +33,7 @@ Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
 Setup=/usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 EOF
 
-pip3 install -qr ./test/fakenames/requirements.txt
+pip3 install -qr ./tests/fakenames/requirements.txt
 ls -l /usr/lib/x86_64-linux-gnu/odbc/
 
-python3 ./test/fakenames/import.py --server 172.17.100.51 --filename=test/fakenames/roles/files/10k_fakenames_fra.csv
+python3 ./tests/fakenames/import.py --server localhost --filename=tests/fakenames/roles/files/10k_fakenames_fra.csv
