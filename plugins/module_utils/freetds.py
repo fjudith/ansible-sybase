@@ -48,7 +48,7 @@ def freetds_common_argument_spec():
     return dict(
         login_user=dict(type='str', default=None),
         login_password=dict(type='str', no_log=True),
-        server=dict(type='str', default='localhost'),
-        port=dict(type='int', default=5000),
+        login_host=dict(type='str', default='localhost'),
+        login_port=dict(type='int', default=5000),
         connect_timeout=dict(type='int', default=30),
     )
