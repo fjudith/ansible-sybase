@@ -9,12 +9,13 @@
   - [freetds_db](./plugins/modules)
   - [freetds_query](./plugins/modules)
 
-- **Roles**
+- **Roles**:
   - [sybase-ase](./roles/sybase-ase)
   - [sybase-ocs](./roles/sybase-ocs)
   - [liquidbase](./roles/liquidbase)
   - [openjdk-8](./role/openjdk-8)
   - [common-firewall (vagrant only)](./roles/common-firewall)
+
 ## Tested with Ansible
 
 - 2.9
