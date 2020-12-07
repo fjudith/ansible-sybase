@@ -15,7 +15,7 @@ on:
 
 env:
   sybase_version_file: "./ansible_collections/dbops/sybase/roles/sybase-ase/defaults/main.yaml"
-  connector_version_file: "./ansible_collections/dbops/sybase/tests/integration/targets/setup_freetds/vars/main.yml"
+  connector_version_file: "./ansible_collections/dbops/sybase/tests/integration/targets/setup_freetds/vars/main.yaml"
   
 jobs:
   sanity:
