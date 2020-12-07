@@ -1,0 +1,3 @@
+plugins/modules/freetds_db.py validate-modules:use-run-command-not-popen
+plugins/modules/freetds_user.py validate-modules:parameter-type-not-in-doc
+plugins/modules/freetds_user.py validate-modules:undocumented-parameter
