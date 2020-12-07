@@ -46,12 +46,12 @@ seealso:
 author:
 - Florian JUDITH (@fjudith)
 extends_documentation_fragment:
-- community.freetds.freetds
+- dbops.sybase.freetds
 '''
 
 EXAMPLES = r'''
 - name: Simple select query to acme db
-  community.freetds.freetds_query:
+  dbops.sybase.freetds_query:
     login_db: acme
     query: SELECT * FROM orders
 - name: Select query to db acme with positional arguments
