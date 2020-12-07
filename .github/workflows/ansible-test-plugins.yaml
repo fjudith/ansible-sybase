@@ -85,7 +85,7 @@ jobs:
         run: "sed -i 's/^version:.*/version: \"${{ matrix.sybase }}\"/g' ${{ env.sybase_version_file }}"
       
       - name: Run sybase server
-        run:  docker run -d --name sybase -p 5000:5000 docker.io/fjudith/sybase:{{ matrix.sybase }}
+        run:  docker run -d --name sybase -p 5000:5000 docker.io/fjudith/sybase:${{ matrix.sybase }}
       
       - name: Run integration tests
         run: ansible-test integration --docker -v --color --retry-on-error --continue-on-error --python ${{ matrix.python }} --diff --coverage
