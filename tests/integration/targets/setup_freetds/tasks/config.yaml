@@ -1,0 +1,6 @@
+- name: Configure ODBC driver
+  become: true
+  copy:
+    src: odbcinst.ini
+    dest: /etc/odbcinst.ini
+    mode: 0644

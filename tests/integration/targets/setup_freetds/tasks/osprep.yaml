@@ -1,0 +1,32 @@
+- name: Install Python prerequisits
+  become: true
+  apt:
+    name: "{{ apt_install_python_prereqs }}"
+    state: present
+
+- name: Install FreeTDS required packages
+  become: true
+  apt:
+    name: "{{ apt_install_packages }}"
+    state: present
+
+- name: Install Python prerequisits
+  become: true
+  yum:
+    name: "{{ yum_install_python_prereqs }}"
+    state: present
+  when:
+    - ansible_distribution in ["CentOS","RedHat"]
+
+- name: Install FreeTDS required packages
+  become: true
+  yum:
+    name: "{{ yum_install_packages }}"
+    state: present
+  when:
+    - ansible_distribution in ["CentOS","RedHat"]
+
+- name: Install Python packages
+  pip:
+    name: "{{ python_packages }}"
+    state: present

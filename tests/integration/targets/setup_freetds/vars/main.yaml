@@ -1,0 +1,23 @@
+apt_install_python_prereqs:
+  - python3-dev
+  - build-essential
+
+yum_install_python_prereqs:
+  - python-devel
+  - python3-devel
+
+apt_install_packages:
+  - freetds-dev
+  - freetds-bin
+  - unixodbc-dev
+  - tdsodbc
+
+yum_install_packages:
+  - unixODBC
+  - unixODBC-devel
+  - freetds
+  - freetds-devel
+
+python_packages:
+  - pyodbc==4.0.30
+  - pymssql==2.1.5

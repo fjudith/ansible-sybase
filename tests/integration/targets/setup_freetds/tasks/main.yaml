@@ -1,0 +1,5 @@
+- name: FreeTDS | OS preparation
+  import_tasks: osprep.yaml
+
+- name: FreeTDS | Configure
+  import_tasks: config.yaml
