@@ -1,5 +1,24 @@
 # Ansible-Sybase
 
+[![Plugins CI](https://github.com/fjudith/ansible-sybase/workflows/Plugins%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Plugins+CI") [![Roles CI](https://github.com/fjudith/ansible-sybase/workflows/Roles%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Roles+CI") [![Codecov](https://img.shields.io/codecov/c/github/fjudith/ansible-sybase)](https://codecov.io/gh/fjudith/ansible-sybase)
+
+## Included content
+
+- **Modules**:
+  - [freetds_user](./plugins/modules)
+  - [freetds_db](./plugins/modules)
+  - [freetds_query](./plugins/modules)
+
+- **Roles**
+  - [sybase-ase](./roles/sybase-ase)
+  - [sybase-ocs](./roles/sybase-ocs)
+  - [liquidbase](./roles/liquidbase)
+  - [openjdk-8](./role/openjdk-8)
+  - [common-firewall (vagrant only)](./roles/common-firewall)
+## Tested with Ansible
+
+- 2.9
+
 This repository contains an Ansible playbook to acheive the following operations:
 
 * [x] Enable local development environment
