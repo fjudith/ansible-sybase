@@ -7,6 +7,12 @@
 
   block:
 
+  - name: Get database engine version
+    freetds_query:
+      <<: *freetds_params
+      query: 'select @@version'
+    register: result
+
   - name: Create db
     freetds_query:
       <<: *freetds_params
