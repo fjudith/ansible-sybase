@@ -23,7 +23,7 @@
   become: true
   become_user: "{{ sybase.user }}"
   lineinfile:
-    path: "/home/{{ sybase.user }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.bashrc"
     line: "export PATH=$PATH:{{ liquibase.install.directory }}"
   when:
     - liquibase.install.global is defined

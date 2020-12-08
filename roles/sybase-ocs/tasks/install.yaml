@@ -31,7 +31,7 @@
   become: true
   become_user: "{{ sybase.user }}"
   lineinfile:
-    path: "{{ sybase.install.client.directory }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.bashrc"
     line: "source {{ sybase.install.client.directory }}/SYBASE.sh"
   tags:
     - sap_ocs_install

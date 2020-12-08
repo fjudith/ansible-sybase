@@ -131,7 +131,7 @@
   become: true
   become_user: "{{ sybase.user }}"
   lineinfile:
-    path: "/home/{{ sybase.user }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.bashrc"
     line: "source {{ sybase.install.server.directory }}/SYBASE.sh"
   tags:
     - sap_ase_install
