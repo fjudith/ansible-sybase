@@ -1,5 +1,0 @@
-- hosts: localhost
-  gather_facts: true
-  vars:
-  roles:
-    - setup_freetds
