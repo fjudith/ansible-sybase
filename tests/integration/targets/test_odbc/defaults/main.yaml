@@ -1,0 +1,27 @@
+---
+# defaults file for test_postgresql_db
+my_user: 'sa'
+my_pass: 'md5d5e044ccd9b4b8adc89e8fed2eb0db8a'
+my_pass_decrypted: 'myPassword'
+dsn: "DRIVER={FreeTDS};Server=localhost;Port=5000;Database=testdb;Uid={{ my_user }};Pwd={{ my_pass_decrypted }}"
+packages:
+  RedHat:
+    - postgresql-odbc
+    - unixODBC
+    - unixODBC-devel
+    - gcc 
+    - gcc-c++
+  Debian:
+    - odbc-postgresql
+    - unixodbc
+    - unixodbc-dev
+    - gcc 
+    - g++ 
+  Suse:
+    - psqlODBC
+    - unixODBC
+    - unixODBC-devel
+    - gcc
+    - gcc-c++
+  FreeBSD:
+    - unixODBC
