@@ -1,6 +1,7 @@
 apt_install_python_prereqs:
   - python3-dev
   - build-essential
+  - software-properties-common
 
 yum_install_python_prereqs:
   - python-devel

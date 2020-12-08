@@ -5,10 +5,17 @@
   args:
     executable: /bin/bash
 
-- name: Configure ODBC driver
+- name: Configure ODBC driver for system
   become: true
   copy:
     src: odbcinst.ini
     dest: /etc/odbcinst.ini
+    mode: 0644
+
+- name: Configure ODBC driver for user
+  become: true
+  copy:
+    src: odbcinst.ini
+    dest: "{{ ansible_env.HOME }}/.odbcinst.ini"
     mode: 0644
 
