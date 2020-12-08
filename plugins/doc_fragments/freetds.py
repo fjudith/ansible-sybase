@@ -35,6 +35,11 @@ options:
       - The connection timeout when connecting to the MySQL server.
     type: int
     default: 30
+  odbc_drive:
+    description:
+      - Name of the driver configuration registered in /etc/odbcinst.ini
+    type: str
+    default: 'FreeTDS'
   encoding:
     description:
       - The ODBC connection string must be sent to the driver as a byte sequence, hence the Python string must first be encoded using the named encoding

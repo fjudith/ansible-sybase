@@ -97,11 +97,12 @@ rowcount:
     sample: [5, 1]
 '''
 
+import pyodbc as freetds_driver
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.sqlops.sybase.plugins.module_utils.freetds import (
     freetds_connect,
     freetds_common_argument_spec,
-    freetds_driver,
     freetds_driver_fail_msg,
 )
 from ansible.module_utils._text import to_native
@@ -131,12 +132,14 @@ def main():
         ),
     )
 
-    db = module.params['login_db']
-    connect_timeout = module.params['connect_timeout']
+    odbc_driver = module.params['odbc_driver']
     login_user = module.params['login_user']
     login_password = module.params['login_password']
     login_host = module.params['login_host']
     login_port = module.params['login_port']
+    login_db = module.params['login_db']
+    connect_timeout = module.params['connect_timeout']
+    encoding = module.params['encoding']
     query = module.params["query"]
 
     if not isinstance(query, (str, list)):
@@ -164,17 +167,17 @@ def main():
     
     if freetds_driver is None:
         module.fail_json(msg=freetds_driver_fail_msg)
-
+    
     # Connect to DB:
     try:
-        cursor, db_connection = freetds_connect(module, login_user, login_password,
-                                                login_host, login_port, db,
+        cursor, db_connection = freetds_connect(module, odbc_driver='FreeTDS', login_user=login_user, login_password=login_password,
+                                                login_host=login_host, login_port=login_port, login_db=login_db,
                                                 connect_timeout=connect_timeout,
-                                                autocommit=autocommit)
+                                                autocommit=autocommit, encoding=encoding)
     except Exception as e:
         module.fail_json(msg="unable to connect to database, check login_user and "
                              "login_password are correct."
-                             "Exception message: %s" % (to_native(e)))
+                             "driver: %s. Exception message: %s" % (odbc_driver, to_native(e)))
 
     # Set defaults:
     changed = False
