@@ -1,20 +1,28 @@
 - vars:
     freetds_parameters: &freetds_params
-      login_user: '{{ sybase.user }}'
-      login_password: '{{ sybase.password }}'
-      login_host: 127.0.0.1
-      login_port: '{{ sybase.port }}'
+      login_user: '{{ freetds.user }}'
+      login_password: '{{ freetds.password }}'
+      login_host: '{{ freetds.host }}'
+      login_port: '{{ freetds.port }}'
+      odbc_driver: 'FreeTDS'
 
   block:
-
+  
+  # - name: Display ODBC driver configuration
+  #   shell: |
+  #     odbcinst -j && \
+  #     cat /etc/odbcinst.ini
+      
+  
   - name: Get database engine version
     freetds_query:
       <<: *freetds_params
       query: 'select @@version'
+      login_db: 'master'
     register: result
 
   - name: Create db
     freetds_query:
       <<: *freetds_params
-      query: 'create database {{ sybase.database.test.name }} on {{ sybase.database.initial }} = {{sybase.database.test.size }}'
+      query: 'create database {{ freetds.database.test.name }} on {{ freetds.database.initial }} = {{freetds.database.test.size }}'
     register: result

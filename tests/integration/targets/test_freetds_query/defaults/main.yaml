@@ -1,11 +1,12 @@
-sybase:
+freetds:
   user: sa
   password: myPassword
+  host: sybase
   port: 5000
   database:
     initial: master
     test:
-      name: test_db
+      name: testdb
       size: 24m
       path: /tmp/test.sql
       tables:
