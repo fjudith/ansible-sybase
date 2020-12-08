@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  sybase:
+    driver: bridge
+
+services:
+  sybase:
+    image: docker.io/fjudith/sybase:16.0.2.2
+    container_name: sybase
+    hostname: sybase
+    expose:
+      - 5000
+      - 5001
+    ports:
+      - 5000:5000
+      - 5001:5001
+    networks:
+      - sybase
+    environment:
+      SYBASE_USER: test
+      SYBASE_PASSWORD: guest1234
+      SYBASE_DB: testdb
