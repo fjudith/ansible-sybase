@@ -13,15 +13,24 @@
   #     cat /etc/odbcinst.ini
       
   
-  - name: Get database engine version
+  - name: Get database engine version from master
     sybase_query:
       <<: *sybase_params
       query: 'select @@version'
       login_db: 'master'
+      single_transaction: true
     register: result
 
-  - name: Create db
+  - name: 'Create Database {{sybase.database.test.name }} from master'
     sybase_query:
       <<: *sybase_params
-      query: 'create database {{ sybase.database.test.name }} on {{ sybase.database.initial }} = {{sybase.database.test.size }}'
+      query: "create database {{ sybase.database.test.name }} on {{ sybase.database.initial }} = '{{sybase.database.test.size }}'"
+      login_db: 'master'
+    register: result
+
+  - name: 'Drop Database {{ sybase.database.test.name }}'
+    sybase_query:
+      <<: *sybase_params
+      query: 'drop database {{ sybase.database.test.name }}'
+      login_db: 'master'
     register: result

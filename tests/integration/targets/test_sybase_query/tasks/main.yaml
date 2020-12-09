@@ -1,2 +1,2 @@
-- name: ASE | Initial Query
-  import_tasks: sybase_query_initial.yaml
+- name: ASE | Ansible db related queries
+  import_tasks: ansibledb_queries.yaml
