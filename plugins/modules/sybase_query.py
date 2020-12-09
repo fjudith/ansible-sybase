@@ -107,6 +107,7 @@ DML_QUERY_KEYWORDS = ('INSERT', 'UPDATE', 'DELETE')
 # TRUNCATE is not DDL query but it also returns 0 rows affected:
 DDL_QUERY_KEYWORDS = ('CREATE', 'DROP', 'ALTER', 'RENAME', 'TRUNCATE')
 
+# Import ODBC drivers
 try:
     import pyodbc as sybase_driver
 except ImportError:
@@ -117,64 +118,11 @@ except ImportError:
 
 sybase_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is required.'
 
-# ===========================================
-# Read ODBC Driver configuration.
-#
 
-def parse_from_odbcinst_config_file(odbcinst_file):
-    # Default values of comment_prefix is '#' and ';'.
-    # '!' added to prevent a parsing error
-    # when a config file contains !includedir parameter.
-    cp = configparser.ConfigParser(comment_prefixes=('#', ';', '!'))
-    cp.read(odbcinst_file)
-    
-    return cp
-
-def sybase_connect(module, login_user=None, login_password=None,
-                    login_host=None, login_port=None, db=None,
-                    connect_timeout=30, autocommit=False, encoding='utf-16le', odbc_driver='FreeTDS'):
-    
-    config = {}
-    odbcinst_file = '/etc/odbcinst.ini'
-
-    if os.path.exists(odbcinst_file):
-        try:
-            cp_odbcinst = parse_from_odbcinst_config_file(odbcinst_file)
-        except Exception as e:
-                module.fail_json(msg="Failed to parse %s: %s" % (odbcinst_file, to_native(e)))
-
-    # for key,value in cp_odbcinst['FreeTDS']:  
-    #     print(key,value)
-
-    config['host'] = login_host
-    config['port'] = login_port
-
-    # If login_user or login_password are given, they should override the
-    # config file
-    if odbc_driver is not None:
-        config['driver'] = odbc_driver
-    if login_user is not None:
-        config['user'] = login_user
-    if login_password is not None:
-        config['password'] = login_password
-    if db is not None:
-        config['database'] = db
-    if connect_timeout is not None:
-        config['timeout'] = connect_timeout
-    if encoding is not None:
-        config['encoding'] = encoding
-    if autocommit is not None:
-        config['autocommit'] = autocommit
-
-    db_connection = sybase_driver.connect(**config)
-    # Monkey patch the Connection class to close the connection when garbage collected
-    def _conn_patch(conn_self):
-        conn_self.close()
-    db_connection.__class__.__del__ = _conn_patch
-    # Patched
-    return db_connection.cursor(), db_connection
-
-# ref: https://github.com/mkleehammer/pyodbc/wiki/The-pyodbc-Module#connect
+# ===============================================
+# Ansible support arguments.
+# ref: https://github.com/mkleehammer/pyodbc/wiki/The-pyodbc-Module
+# ===============================================
 def sybase_common_argument_spec():
     return dict(
         login_user=dict(type='str', default=None),
@@ -191,10 +139,9 @@ def sybase_common_argument_spec():
         single_transaction=dict(type='bool', default=False),
     )
 
-# ===========================================
+# ===============================================
 # Module execution.
-#
-
+# ===============================================
 def main():
     # Prepare parameters
     argument_spec = sybase_common_argument_spec()
@@ -205,25 +152,31 @@ def main():
         ),
     )
 
-    db              = module.params['login_db']
-    connect_timeout = module.params['connect_timeout']
-    login_user      = module.params['login_user']
-    login_password  = module.params['login_password']
+    # Mandatory parameters
+    odbc_driver     = module.params['odbc_driver']
     login_host      = module.params['login_host']
     login_port      = module.params['login_port']
-    odbc_driver     = module.params['odbc_driver']
+    login_user      = module.params['login_user']
+    login_password  = module.params['login_password']
+    login_db        = module.params['login_db']
+    connect_timeout = module.params['connect_timeout']
+    encoding        = module.params["encoding"]
     query           = module.params["query"]
 
+    # Check query format
     if not isinstance(query, (str, list)):
         module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
 
+    # Convert query to string
     if isinstance(query, str):
         query = [query]
 
+    # Change query array elements
     for elem in query:
         if not isinstance(elem, str):
             module.fail_json(msg="the elements in query list must be strings, passed '%s' %s" % (elem, type(elem)))
     
+    # Disable autocommit when single transaction is enabled
     if module.params["single_transaction"]:
         autocommit = False
     else:
@@ -237,14 +190,15 @@ def main():
     else:
         arguments = None  
     
+    # Check ODBC driver initialization
     if sybase_driver is None:
         module.fail_json(msg=sybase_driver_fail_msg)
     
-    # Connect to DB:
+    # Connect to Database:
     try:
         db_connection = sybase_driver.connect(driver=odbc_driver, user=login_user, password=login_password,
-                                              host=login_host, port=login_port, database=db,
-                                              connect_timeout=connect_timeout,
+                                              host=login_host, port=login_port, database=login_db,
+                                              connect_timeout=connect_timeout, encoding=encoding,
                                               autocommit=autocommit)
     except Exception as e:
         module.fail_json(msg="unable to connect to database: '%s', check login_user and "
@@ -263,10 +217,14 @@ def main():
     query_result = []
     executed_queries = []
     rowcount = []
+    description = {}
 
     for q in query:
         try:
-            cursor.execute(q, arguments)
+            if arguments:
+                cursor.execute(q, arguments)
+            else:
+                cursor.execute(q)
 
         except Exception as e:
             if not autocommit:
@@ -276,8 +234,24 @@ def main():
             module.fail_json(msg="Cannot execute SQL '%s' args [%s]: %s" % (q, arguments, to_native(e)))
 
         try:
-            query_result.append([dict(row) for row in cursor.fetchall()])
+            # Get the rows out into an 2d array
+            for row in cursor.fetchall():
+                new_row = []
+                for column in row:
+                    new_row.append("{0}".format(column))
+                query_result.append(new_row)
+            
+            for row_description in cursor.description:
+                description['name'] = row_description[0]
+                description['type'] = row_description[1].__name__
+                description['display_size'] = row_description[2]
+                description['internal_size'] = row_description[3]
+                description['precision'] = row_description[4]
+                description['scale'] = row_description[5]
+                description['nullable'] = row_description[6]
 
+        except sybase_driver.ProgrammingError as pe:
+            pass
         except Exception as e:
             if not autocommit:
                 db_connection.rollback()
@@ -294,13 +268,6 @@ def main():
             if keyword in q:
                 changed = True
 
-        try:
-            executed_queries.append(cursor._last_executed)
-        except AttributeError:
-          # MySQLdb removed cursor._last_executed as a duplicate of cursor._executed
-          executed_queries.append(cursor._executed)
-        rowcount.append(cursor.rowcount)
-
     # When the module run with the single_transaction == True:
     if not autocommit:
         db_connection.commit()
@@ -311,6 +278,7 @@ def main():
         'executed_queries': executed_queries,
         'query_result': query_result,
         'rowcount': rowcount,
+        'descrption': description,
     }
 
     # Exit:
