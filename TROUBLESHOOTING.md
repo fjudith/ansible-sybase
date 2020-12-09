@@ -2,13 +2,9 @@
 
 ## SAP ASE
 
-### Memory Leak
-
-> https://apps.support.sap.com/sap/support/knowledge/en/2266899
-
 ## Ansible
 
-### Monitor SAP ASE installation
+### Monitor SAP ASE installation in Vagrant
 
 Ansible does not return the stdout in realtime, it is therefore necessary to monitor logs inside the database instance
 
