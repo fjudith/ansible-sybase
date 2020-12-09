@@ -204,7 +204,7 @@ def main():
     except Exception as e:
         module.fail_json(msg="unable to connect to database: '%s', check login_user and "
                              "login_password are correct."
-                             "ODBC driver: '%s'. Exception message: '%s'" % (db, odbc_driver, to_native(e)))
+                             "ODBC driver: '%s'. Exception message: '%s'" % (login_db, odbc_driver, to_native(e)))
 
     # Get cursor
     cursor = db_connection.cursor()
