@@ -5,9 +5,9 @@
 ## Included content
 
 - **Modules**:
-  - [freetds_user](./plugins/modules)
-  - [freetds_db](./plugins/modules)
-  - [freetds_query](./plugins/modules)
+  - [sybase_user](./plugins/modules)
+  - [sybase_db](./plugins/modules)
+  - [sybase_query](./plugins/modules)
 
 - **Roles**:
   - [sybase-ase](./roles/sybase-ase)
