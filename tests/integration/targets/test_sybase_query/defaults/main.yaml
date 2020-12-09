@@ -6,7 +6,8 @@ sybase:
   database:
     initial: master
     test:
-      name: testdb
+      name: ansibledb
+      # Minimal supported size support by Sybase
       size: 24m
       path: /tmp/test.sql
       tables:
