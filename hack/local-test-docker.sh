@@ -41,8 +41,13 @@ done
 echo ""
 
 echo "Run Ansible tests"
+# ansible-test integration \
+# --docker "default" \
+# --docker-network "docker_sybase" \
+# --python "3.6" \
+# -v --color --retry-on-error --continue-on-error --diff --coverage
 ansible-test integration \
 --docker "default" \
 --docker-network "docker_sybase" \
 --python "3.6" \
--v --color --retry-on-error --continue-on-error --diff --coverage
+-v --color --continue-on-error --diff --coverage
