@@ -78,23 +78,20 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-executed_queries:
-    description: List of executed queries.
-    returned: always
+results:
+    description: List of lists of strings containing selected rows, likely empty for DDL statements.
+    returned: success
     type: list
-    sample: ['select * FROM bar', 'UPDATE bar SET id = 1 WHERE id = 2']
-query_result:
-    description:
-    - List of lists (sublist for each query) containing dictionaries
-      in column:value form representing returned rows.
-    returned: changed
+    elements: list
+description:
+    description: "List of dicts about the columns selected from the cursors, likely empty for DDL statements. See notes."
+    returned: success
     type: list
-    sample: [[{"Column": "Value1"},{"Column": "Value2"}], [{"ID": 1}, {"ID": 2}]]
-rowcount:
-    description: Number of affected rows for each subquery.
-    returned: changed
-    type: list
-    sample: [5, 1]
+    elements: dict
+row_count:
+    description: "The number of rows selected or modified according to the cursor defaults to -1. See notes."
+    returned: success
+    type: str
 '''
 
 import os
@@ -106,6 +103,10 @@ from ansible.module_utils._text import to_native
 DML_QUERY_KEYWORDS = ('INSERT', 'UPDATE', 'DELETE')
 # TRUNCATE is not DDL query but it also returns 0 rows affected:
 DDL_QUERY_KEYWORDS = ('CREATE', 'DROP', 'ALTER', 'RENAME', 'TRUNCATE')
+
+DQL_QUERY_KEYWORDS = ('SELECT')
+
+DCL_QUERY_KEYWORDS = ('GRANT', 'REVOKE')
 
 # Import ODBC drivers
 try:
@@ -208,16 +209,16 @@ def main():
     # Get cursor
     cursor = db_connection.cursor()
 
-    # Set defaults:
-    changed = False
-
     max_keyword_len = len(max(DML_QUERY_KEYWORDS + DDL_QUERY_KEYWORDS, key=len))
 
     # Execute query:
-    query_result = []
-    executed_queries = []
-    rowcount = []
-    description = {}
+    # Set defaults:
+    result = dict(
+        changed=False,
+        description=[],
+        row_count=-1,
+        results=[],
+    )
 
     for q in query:
         try:
@@ -239,9 +240,10 @@ def main():
                 new_row = []
                 for column in row:
                     new_row.append("{0}".format(column))
-                query_result.append(new_row)
+                result['results'].append(new_row)
             
             for row_description in cursor.description:
+                description = {}
                 description['name'] = row_description[0]
                 description['type'] = row_description[1].__name__
                 description['display_size'] = row_description[2]
@@ -262,27 +264,25 @@ def main():
         q = q.lstrip()[0:max_keyword_len].upper()
         for keyword in DML_QUERY_KEYWORDS:
             if keyword in q and cursor.rowcount > 0:
-                changed = True
+                result['changed'] = True
 
         for keyword in DDL_QUERY_KEYWORDS:
             if keyword in q:
-                changed = True
+                result['changed'] = True
+        
+        for keywork in DQL_QUERY_KEYWORDS:
+            if keywork in q:
+                result['changed'] = True
+
+        # Get number of rows
+        result['row_count'] = cursor.rowcount
 
     # When the module run with the single_transaction == True:
     if not autocommit:
         db_connection.commit()
 
-    # Create dict with returned values:
-    kw = {
-        'changed': changed,
-        'executed_queries': executed_queries,
-        'query_result': query_result,
-        'rowcount': rowcount,
-        'descrption': description,
-    }
-
     # Exit:
-    module.exit_json(**kw)
+    module.exit_json(**result)
 
 
 if __name__ == '__main__':

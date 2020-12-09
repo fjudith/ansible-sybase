@@ -6,31 +6,157 @@
       login_port: '{{ sybase.port }}'
 
   block:
-  
-  # - name: Display ODBC driver configuration
-  #   shell: |
-  #     odbcinst -j && \
-  #     cat /etc/odbcinst.ini
-      
-  
+
   - name: Get database engine version from master
     sybase_query:
       <<: *sybase_params
       query: 'select @@version'
       login_db: 'master'
       single_transaction: true
-    register: result
+    register: results
 
   - name: 'Create Database {{sybase.database.test.name }} from master'
     sybase_query:
       <<: *sybase_params
       query: "create database {{ sybase.database.test.name }} on {{ sybase.database.initial }} = '{{sybase.database.test.size }}'"
       login_db: 'master'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: 'Create table "films" in {{sybase.database.test.name }} database'
+    sybase_query:
+      <<: *sybase_params
+      query: |
+        CREATE TABLE films (
+            film_id     numeric (10,0) identity primary key,
+            code        char(5) not null,
+            title       nvarchar(40) not null,
+            did         int not null,
+            date_prod   datetime,
+            kind        nvarchar(10),
+            len         char(5),
+        )
+      login_db: '{{sybase.database.test.name }}'
     register: result
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: Insert a record without params
+    sybase_query:
+      <<: *sybase_params
+      query: "INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu1', 'My First Movie', 1, '2020-01-01', 'SyFi', '02:00')"
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: Insert mutltiple record using a multiline string without params
+    sybase_query:
+      <<: *sybase_params
+      query: |
+        INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu2', 'My Second Movie', 2, '2020-02-02', 'Horror', '01:45')
+        INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu3', 'My Third Movie', 3, '2020-03-03', 'Thriller', '02:00')
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: Insert mutltiple record in an array without params
+    sybase_query:
+      <<: *sybase_params
+      query:
+        - "INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu4', 'My Fourth Movie', 4, '2020-04-04', 'Peplum', '03:20')"
+        - "INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu5', 'My Fifth Movie', 5, '2020-05-05', 'Western', '02:55')"
+        - "INSERT INTO films (code, title, did, date_prod, kind, len) VALUES ('mycu6', 'My Sixth Movie', 6, '2020-06-06', 'Documentary', '01:25')"
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: Insert a record with positional arguments
+    sybase_query:
+      <<: *sybase_params
+      query: "INSERT INTO films (code, title, did, date_prod, kind, len) VALUES (?, ?, ?, ?, ?, ?)"
+      positional_args:
+        - 'mycu7'
+        - 'My Seventh Movie'
+        - 7
+        - '2020-07-07'
+        - 'Comedy'
+        - '01:50'
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+        - results['row_count'] == 1
+        - results['results'] == []
+        - results['description'] == []
+
+  - name: Select all raws without params
+    sybase_query:
+      <<: *sybase_params
+      query: "SELECT * FROM films"
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+
+  - name: Select a single raw without params and do not coherse changed (n. see below assert)
+    sybase_query:
+      <<: *sybase_params
+      query: "SELECT * FROM films where code='mycu1'"
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+
+  - assert:
+      that:
+        - results is changed
+        - results is successful
+        - results.row_count == -1
+
+  - name: Select a multiple row whith params and coherse changed (n. see below assert)
+    sybase_query:
+      <<: *sybase_params
+      query: 'SELECT * FROM films WHERE code=? or code=?'
+      positional_args:
+        - 'mycu9'
+        - 'mycu10'
+      login_db: '{{sybase.database.test.name }}'
+    register: results
+    changed_when: False
+
+  - assert:
+      that:
+        - results is not changed
+        - results is successful
+        - results.row_count == 0
 
   - name: 'Drop Database {{ sybase.database.test.name }}'
     sybase_query:
       <<: *sybase_params
       query: 'drop database {{ sybase.database.test.name }}'
       login_db: 'master'
-    register: result
+    register: results
+
+  - assert:
+      that:
+        - results is successful
+        - results is changed
+        - results['row_count'] == 0
+        - results['results'] == []
+        - results['description'] == []
