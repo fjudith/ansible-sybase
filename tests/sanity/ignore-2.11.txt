@@ -1,9 +1,9 @@
   
-plugins/modules/freetds_db.py validate-modules:doc-elements-mismatch
-plugins/modules/freetds_db.py validate-modules:parameter-list-no-elements
-plugins/modules/freetds_db.py validate-modules:use-run-command-not-popen
-plugins/modules/freetds_info.py validate-modules:doc-elements-mismatch
-plugins/modules/freetds_info.py validate-modules:parameter-list-no-elements
-plugins/modules/freetds_query.py validate-modules:parameter-list-no-elements
-plugins/modules/freetds_user.py validate-modules:undocumented-parameter
-plugins/modules/freetds_variables.py validate-modules:doc-required-mismatch
+plugins/modules/sybase_db.py validate-modules:doc-elements-mismatch
+plugins/modules/sybase_db.py validate-modules:parameter-list-no-elements
+plugins/modules/sybase_db.py validate-modules:use-run-command-not-popen
+plugins/modules/sybase_info.py validate-modules:doc-elements-mismatch
+plugins/modules/sybase_info.py validate-modules:parameter-list-no-elements
+plugins/modules/sybase_query.py validate-modules:parameter-list-no-elements
+plugins/modules/sybase_user.py validate-modules:undocumented-parameter
+plugins/modules/sybase_variables.py validate-modules:doc-required-mismatch

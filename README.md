@@ -24,8 +24,8 @@ This repository contains an Ansible playbook to acheive the following operations
 
 * [x] Enable local development environment
 * [x] Manage SAP ASE and OCS installation on Redhat/Centos distributions using Ansible
-* [ ] _In progress_: Manage basic Database Administrator related operations (database, table, permissions, backup & restore, etc.) using Ansible
-* [ ] _In progress_: Manage basic Database Developer related operations (stored procedure compilation) using Ansible
+* [ ] _In progress_ : Manage basic Database Administrator related operations (database, table, permissions, backup & restore, etc.) using Ansible
+* [ ] _In progress_ : Manage basic Database Developer related operations (stored procedure compilation) using Ansible
 
 Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress
 

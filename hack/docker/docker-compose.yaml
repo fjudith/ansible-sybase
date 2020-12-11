@@ -6,7 +6,7 @@ networks:
 
 services:
   sybase:
-    image: docker.io/fjudith/sybase:16.0.2.2
+    image: docker.io/sqlops/sybase:16.0.2.2
     container_name: sybase
     hostname: sybase
     expose:

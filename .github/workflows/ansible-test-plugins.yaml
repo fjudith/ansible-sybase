@@ -93,7 +93,7 @@ jobs:
         run: docker network create sybase
 
       - name: Run sybase server
-        run:  docker run -d --name sybase --network sybase -p 5000:5000 docker.io/fjudith/sybase:${{ matrix.sybase }}
+        run:  docker run -d --name sybase --network sybase -p 5000:5000 docker.io/sqlops/sybase:${{ matrix.sybase }}
       
       - name: Run integration tests
         run: ansible-test integration --docker default --docker-network sybase -v --color --retry-on-error --continue-on-error --python ${{ matrix.python }} --diff --coverage
