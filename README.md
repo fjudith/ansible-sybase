@@ -16,18 +16,24 @@
   - [openjdk-8](./role/openjdk-8)
   - [common-firewall (vagrant only)](./roles/common-firewall)
 
+## Cloning
+
+This repository is designed as per [Ansible Collections]() guidelines. It therere required to clone this repository in a specific directory structure.
+
+```bash
+mdkdir -p ansible_collections/sqlops/ && \
+cd ansible_collections/sqlops/ && \
+git clone "https://github.com/fjudith/ansible-sybase" sybase
+```
+
 ## Tested with Ansible
 
-- 2.9
+- 2.9.x
+- 2.10.x
 
-This repository contains an Ansible playbook to acheive the following operations:
+## Roadmap
 
-* [x] Enable local development environment
-* [x] Manage SAP ASE and OCS installation on Redhat/Centos distributions using Ansible
-* [ ] _In progress_ : Manage basic Database Administrator related operations (database, table, permissions, backup & restore, etc.) using Ansible
-* [ ] _In progress_ : Manage basic Database Developer related operations (stored procedure compilation) using Ansible
-
-Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress
+Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress.
 
 ## Technologies
 

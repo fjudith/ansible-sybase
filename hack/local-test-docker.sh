@@ -41,13 +41,13 @@ done
 echo ""
 
 echo "Run Ansible tests"
-ansible-test integration \
---docker "centos7" \
---docker-network "docker_sybase" \
---python "2.7" \
--vvv --color --continue-on-error --diff --coverage
 # ansible-test integration \
-# --docker "docker.io/sqlops/sybase-test-container:1.0.0-centos7" \
+# --docker "centos7" \
 # --docker-network "docker_sybase" \
-# --python "3.6" \
-# -v --color --continue-on-error --diff --coverage
+# --python "2.7" \
+# -vvv --color --continue-on-error --diff --coverage
+ansible-test integration \
+--docker "docker.io/sqlops/sybase-test-container:1.0.0-centos7" \
+--docker-network "docker_sybase" \
+--python "3.6" \
+-v --color --continue-on-error --diff --coverage
