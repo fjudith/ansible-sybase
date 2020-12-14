@@ -1,6 +1,7 @@
 # Ansible-Sybase
 
 [![Plugins CI](https://github.com/fjudith/ansible-sybase/workflows/Plugins%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Plugins+CI") [![Roles CI](https://github.com/fjudith/ansible-sybase/workflows/Roles%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Roles+CI") [![Codecov](https://img.shields.io/codecov/c/github/fjudith/ansible-sybase)](https://codecov.io/gh/fjudith/ansible-sybase)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase?ref=badge_shield)
 
 ## Included content
 
@@ -49,3 +50,6 @@ Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress.
 * [Bash](https://fr.wikipedia.org/wiki/Bourne-Again_shell): Language used for general shell scripting
 * [Python](https://python.org): Language used to write unit tests and Ansible modules
 * [Powershell Core](https://github.com/powershell/powershell): Language used for Windows specific shell scripting
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase?ref=badge_large)
