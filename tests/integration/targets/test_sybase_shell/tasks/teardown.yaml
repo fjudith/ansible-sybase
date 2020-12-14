@@ -1,0 +1,7 @@
+- name: Remove database
+  shell: >-
+    {{ sybase.client.isql_command }}
+    -U {{ sybase.user }}
+    -P {{ sybase.password }}
+    -S {{ sybase.host }}
+    -i<</tmp/drop.sql

@@ -1,0 +1,16 @@
+sp_adduser '{{ sybase.database.user }}', '{{ sybase.database.password }}', null
+go
+grant create default to {{ sybase.database.user }}
+go
+grant create table to {{ sybase.database.user }}
+go
+grant create view to {{ sybase.database.user }}
+go
+grant create rule to {{ sybase.database.user }}
+go
+grant create function to {{ sybase.database.user }}
+go
+grant create procedure to {{ sybase.database.user }}
+go
+commit
+go

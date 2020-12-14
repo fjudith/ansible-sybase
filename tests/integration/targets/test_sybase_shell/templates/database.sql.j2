@@ -1,0 +1,24 @@
+use master
+go
+disk resize name='master', size='200m'
+go
+create database {{ sybase.database.name }} on master = '50m'
+go
+exec sp_extendsegment 'logsegment', {{ sybase.database.name }}, 'master'
+go
+exec sp_dboption {{ sybase.database.name }}, 'abort tran on log full', true
+go
+exec sp_dboption {{ sybase.database.name }}, 'allow nulls by default', true
+go
+exec sp_dboption {{ sybase.database.name }}, 'ddl in tran', true
+go
+exec sp_dboption {{ sybase.database.name }}, 'trunc log on chkpt', true
+go
+exec sp_dboption {{ sybase.database.name }}, 'full logging for select into', true
+go
+exec sp_dboption {{ sybase.database.name }}, 'full logging for alter table', true
+go
+
+use {{ sybase.database.name }}
+sp_dboption {{ sybase.database.name }}, 'select into', true
+go
