@@ -95,6 +95,7 @@ row_count:
 '''
 
 import os
+from datetime import datetime
 
 from ansible.module_utils.six.moves import configparser
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
@@ -164,6 +165,9 @@ def main():
     encoding        = module.params["encoding"]
     query           = module.params["query"]
 
+    changed = False
+    started = datetime.now()
+
     # Check query format
     if not isinstance(query, (str, list)):
         module.fail_json(msg="the query option value must be a string or list, passed %s" % type(query))
@@ -214,7 +218,7 @@ def main():
     # Execute query:
     # Set defaults:
     result = dict(
-        changed=False,
+        changed=changed,
         description=[],
         row_count=-1,
         results=[],
@@ -280,6 +284,13 @@ def main():
     # When the module run with the single_transaction == True:
     if not autocommit:
         db_connection.commit()
+
+    finished = datetime.now()
+    difference = (finished - started)
+
+    result['start'] = str(started)
+    result['end'] = str(finished)
+    result['duration'] = str(difference)
 
     # Exit:
     module.exit_json(**result)

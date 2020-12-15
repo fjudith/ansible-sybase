@@ -3,6 +3,7 @@ import subprocess
 import traceback
 import argparse
 import socket
+from datetime import datetime
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves import shlex_quote
@@ -192,7 +193,7 @@ def main():
     binary = module.params['binary']
 
     changed = False
-
+    started = datetime.now()
     # Sanity check
     # if len(login_db) > 1:
     #     module.fail_json(msg="Multiple databases are not supported")
@@ -333,10 +334,23 @@ def main():
     executed_commands.append(cmd)
     return_code, stdout, stderr = module.run_command(cmd, use_unsafe_shell=True)
     
+    finished = datetime.now()
+    difference = (finished - started)
+
     if return_code != 0:
-        module.fail_json(msg="{0}".format(stderr))
-    module.exit_json(changed=True, msg=stdout.replace('\t','  '),
-                         executed_commands=executed_commands)
+        module.fail_json(msg="{0}".format(stderr),
+                         start=str(started),
+                         end=str(finished),
+                         duration=str(difference.resolution)
+                         )
+    changed = True
+    module.exit_json(changed=changed,
+                     msg=stdout.replace('\t','  '),
+                     executed_commands=executed_commands,
+                     start=str(started),
+                     end=str(finished),
+                     duration=str(difference.resolution)
+                     )
 
 
 if __name__ == '__main__':

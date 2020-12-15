@@ -5,8 +5,8 @@
 ## Included content
 
 - **Modules**:
-  - [sybase_user](./plugins/modules)
-  - [sybase_db](./plugins/modules)
+  - [sybase_bcp](./plugins/modules)
+  - [sybase_isql](./plugins/modules)
   - [sybase_query](./plugins/modules)
 
 - **Roles**:
