@@ -1,1 +1,12 @@
+use {{ sybase.database.name }}
+go
+drop table {{ sybase.database.user }}.{{ sybase.database.name }}
+go
+exec sp_dropuser {{ sybase.database.user }}
+go
+use master
+go
+exec sp_dboption {{ sybase.database.name }}, 'single user', true
+go
 drop database {{ sybase.database.name }}
+go

@@ -1,4 +1,4 @@
-sp_adduser '{{ sybase.database.user }}', '{{ sybase.database.password }}', null
+sp_adduser '{{ sybase.database.user }}', '{{ sybase.database.user }}', null
 go
 grant create default to {{ sybase.database.user }}
 go

@@ -16,7 +16,7 @@
 
 - name: Create database
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}' \
     -U '{{ sybase.user }}' \
     -P '{{ sybase.password }}' \
@@ -26,27 +26,26 @@
 
 - name: Create user
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
-    -D master
     -i"/tmp/user.sql"
 
 - name: Create permissions
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
-    -D master
-    -i"/tmp/user.sql"
+    -D '{{ sybase.database.name }}'
+    -i"/tmp/permissions.sql"
 
 - name: Create table
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.database.user }}'
     -P '{{ sybase.database.password }}'

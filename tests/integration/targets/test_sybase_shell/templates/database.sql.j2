@@ -4,8 +4,6 @@ disk resize name='master', size='200m'
 go
 create database {{ sybase.database.name }} on master = '50m'
 go
-exec sp_extendsegment 'logsegment', {{ sybase.database.name }}, 'master'
-go
 exec sp_dboption {{ sybase.database.name }}, 'abort tran on log full', true
 go
 exec sp_dboption {{ sybase.database.name }}, 'allow nulls by default', true
@@ -18,7 +16,15 @@ exec sp_dboption {{ sybase.database.name }}, 'full logging for select into', tru
 go
 exec sp_dboption {{ sybase.database.name }}, 'full logging for alter table', true
 go
-
-use {{ sybase.database.name }}
-sp_dboption {{ sybase.database.name }}, 'select into', true
+exec sp_dboption {{ sybase.database.name }}, 'select into', true
 go
+
+-- Generates Error: This command has been ignored.  Extending the log segment on device 'master'", "would leave no space for creating objects in database 'fk_shell'.
+-- https://help.sap.com/viewer/29a04b8081884fb5b715fe4aa1ab4ad2/16.0.2.9/en-US/ab667031bc2b10148eb1d029c4f988ca.html?q=sp_extendsegment
+-- exec sp_dboption {{ sybase.database.name }}, 'single user', true
+-- go
+
+-- use {{ sybase.database.name }}
+-- go
+-- exec sp_extendsegment 'logsegment', {{ sybase.database.name }}, 'master'
+-- go

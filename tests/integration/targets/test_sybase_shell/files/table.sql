@@ -1,4 +1,4 @@
-CREATE TABLE fk_shell (
+CREATE TABLE fakenames (
   number numeric (10,0) identity primary key,
   gender nvarchar(6) not null,
   nameset nvarchar(25) not null,
