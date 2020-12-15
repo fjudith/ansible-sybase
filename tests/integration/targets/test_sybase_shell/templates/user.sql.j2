@@ -1,4 +1,11 @@
 use master
 go
-create login {{ sybase.database.user }} with password '{{ sybase.database.password }}'
+if not exists (
+    select 1
+    from syslogins
+    where name = '{{ sybase.database.user }}'
+)
+    create login {{ sybase.database.user }} with password '{{ sybase.database.password }}'
+else
+    print "Login '{{ sybase.database.user }}' already exists"
 go

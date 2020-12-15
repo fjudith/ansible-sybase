@@ -1,4 +1,11 @@
-sp_adduser '{{ sybase.database.user }}', '{{ sybase.database.user }}', null
+if not exists (
+    select 1
+    from sysusers
+    where name = '{{ sybase.database.user }}'
+)
+    exec sp_adduser '{{ sybase.database.user }}', '{{ sybase.database.user }}', null
+else
+    print print "User '{{ sybase.database.user }}' is already assigned to database"
 go
 grant create default to {{ sybase.database.user }}
 go

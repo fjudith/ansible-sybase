@@ -2,7 +2,12 @@ use master
 go
 disk resize name='master', size='200m'
 go
-create database {{ sybase.database.name }} on master = '50m'
+if not exists (
+    select 1
+    from sysdatabases
+    where name = 'fk_shell'
+)
+create database {{ sybase.database.name }} on master = '{{ sybase.database.size }}'
 go
 exec sp_dboption {{ sybase.database.name }}, 'abort tran on log full', true
 go

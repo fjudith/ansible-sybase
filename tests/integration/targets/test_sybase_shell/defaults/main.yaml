@@ -12,3 +12,4 @@ sybase:
     name: fk_shell
     user: user1
     password: test1234
+    size: 50m

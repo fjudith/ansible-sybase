@@ -1,6 +1,6 @@
 use {{ sybase.database.name }}
 go
-drop table {{ sybase.database.user }}.{{ sybase.database.name }}
+drop table {{ sybase.database.user }}.fakenames
 go
 exec sp_dropuser {{ sybase.database.user }}
 go

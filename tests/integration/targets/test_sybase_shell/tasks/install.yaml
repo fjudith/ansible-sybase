@@ -17,11 +17,12 @@
 - name: Create database
   shell: >-
     source {{ sybase.client.env_command }} &&
-    '{{ sybase.client.isql_command }}' \
-    -U '{{ sybase.user }}' \
-    -P '{{ sybase.password }}' \
-    -S '{{ sybase.server }}' \
-    -D master \
+    '{{ sybase.client.isql_command }}'
+    -U '{{ sybase.user }}'
+    -P '{{ sybase.password }}'
+    -S '{{ sybase.server }}'
+    -D master
+    --retserverror
     -i"/tmp/database.sql"
 
 - name: Create user
@@ -31,6 +32,7 @@
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
+    --retserverror
     -i"/tmp/user.sql"
 
 - name: Create permissions
@@ -41,6 +43,7 @@
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
     -D '{{ sybase.database.name }}'
+    --retserverror
     -i"/tmp/permissions.sql"
 
 - name: Create table
@@ -51,4 +54,5 @@
     -P '{{ sybase.database.password }}'
     -S '{{ sybase.server }}'
     -D '{{ sybase.database.name }}'
+    --retserverror
     -i"/tmp/table.sql"

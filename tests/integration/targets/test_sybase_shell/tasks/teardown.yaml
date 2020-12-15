@@ -5,4 +5,5 @@
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
+    --retserverror
     -i"/tmp/drop.sql"
