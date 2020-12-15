@@ -1,0 +1,9 @@
+- name: Remove database
+  sybase_isql:
+    login_user: '{{ sybase.user }}'
+    login_password: '{{ sybase.password }}'
+    login_server: '{{ sybase.server }}'
+    input_file: /tmp/drop.sql
+  environment:
+    SYBASE: /opt/sybase
+    SYBASE_OCS: OCS-16_0

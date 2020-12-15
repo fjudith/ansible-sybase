@@ -1,0 +1,29 @@
+- name: "Database script"
+  template:
+    src: database.sql.j2
+    dest: /tmp/database.sql
+    mode: 0644
+
+- name: "Table script"
+  copy:
+    src: table.sql
+    dest: /tmp/table.sql
+    mode: 0644
+
+- name: "User script"
+  template:
+    src: user.sql.j2
+    dest: /tmp/user.sql
+    mode: 0644
+
+- name: "Permissions script"
+  template:
+    src: permissions.sql.j2
+    dest: /tmp/permissions.sql
+    mode: 0644
+
+- name: "Database removal script"
+  template:
+    src: drop.sql.j2
+    dest: /tmp/drop.sql
+    mode: 0644

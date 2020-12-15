@@ -43,7 +43,7 @@ parser.add_argument('-M', '--label', help='(Secure SQL Server only) enables mult
 parser.add_argument('-o', '--output-file', help='Specifies the name of an operating system file to store the output from isql.', default=None)
 parser.add_argument('-P', '--password', help='Specifies your Adaptive Server password.', default=None)
 parser.add_argument('-R', '--remote-server-principal', help='Specifies the principal name for the server as defined to the security mechanism.', default=None)
-parser.add_argument('-s', '--column-separator', help='Resets the column separator character, which is blank by default. (for example, "|", ";", "&", "<", ">"), enclose them in quotes or precede them with a backslash.', default=None)
+parser.add_argument('-s', '--column-separator', help='Resets the column separator character, which is blank by default. (for example, "|", ";", "&", "<", ">"), enclose them in quotes or precede them with a backslash.', default='|')
 parser.add_argument('-S', '--server', help='Specifies the name of the Adaptive Server to which. to connect to.', default='localhost')
 parser.add_argument('-t', '--timeout', help='Specifies the number of seconds before a SQL command times out.', default=60)
 parser.add_argument('-U', '--username', help='Specifies a login name. Login names are case sensitive.', default='sa')
@@ -100,8 +100,8 @@ def sybase_common_argument_spec():
         label=dict(type='str', default=args.label),
         output_file=dict(type='str', default=args.output_file),
         login_password=dict(type='str', no_log=args.password),
-        remote_server_principal=dict(type='str', no_log=args.remote_server_principal),
-        column_separator=dict(type='str', no_log=args.column_separator),
+        remote_server_principal=dict(type='str', default=args.remote_server_principal),
+        column_separator=dict(type='str', default=args.column_separator),
         login_server=dict(type='str', default=args.server),
         connect_timeout=dict(type='int', default=args.timeout),
         login_user=dict(type='str', default=args.username),
@@ -123,7 +123,7 @@ def sybase_common_argument_spec():
         appname=dict(type='str', default=args.appname),
         filemode=dict(type='int', default=args.filemode),
         history=dict(type='int', default=args.history),
-        binary=dict(type='int', default=args.binary),
+        binary=dict(type='str', default=args.binary),
     )
 
 # ===============================================
@@ -194,8 +194,8 @@ def main():
     changed = False
 
     # Sanity check
-    if len(login_db) > 1:
-        module.fail_json(msg="Multiple databases are not supported")
+    # if len(login_db) > 1:
+    #     module.fail_json(msg="Multiple databases are not supported")
 
     if input_file and not os.path.exists(input_file):
         module.fail_json(msg="Input file '{0}' not found".format(input_file))
@@ -212,16 +212,20 @@ def main():
     if trusted_txt_file and not os.path.exists(trusted_txt_file):
         module.fail_json(msg="Sybase installation directory '{0}' not found".format(trusted_txt_file))
     
-    if binary and os.path.exists("{0}/{1}".format(sybase_path, binary)):
-        isql_command = "{0}/{1}".format(sybase_path, binary)
-    elif  not binary and os.path.exists("{0}/isql64".format(sybase_path)):
-        isql_command = "{0}/isql64".format(sybase_path)
-    elif  not binary and os.path.exists("{0}/isql".format(sybase_path)):
-        isql_command = "{0}/isql".format(sybase_path)
+    # Define isql command line location
+    if binary and os.path.exists("{0}/OCS-16_0/bin/{1}".format(sybase_path, binary)):
+        isql_command = "{0}/OCS-16_0/bin/{1}".format(sybase_path, binary)
+
+    elif  not binary and os.path.exists("{0}/OCS-16_0/bin/isql64".format(sybase_path)):
+        isql_command = "{0}/OCS-16_0/bin/isql64".format(sybase_path)
+
+    elif  not binary and os.path.exists("{0}/OCS-16_0/bin/isql".format(sybase_path)):
+        isql_command = "{0}/OCS-16_0/bin/isql".format(sybase_path)
+
     else:
         module.fail_json(msg="Sybase 'isql' or 'isql64 command not found")
     
-    cmd = [module.get_bin_path(sql_command, True)]
+    cmd = [module.get_bin_path(isql_command, True)]
 
     # If version, run the command directly
     if binary_version:
@@ -248,7 +252,7 @@ def main():
         if charset:
             cmd.append("-a {0}".format(shlex_quote(charset)))
         if packet_size:
-            cmd.append("-A {0}".format(shlex_quote(packet_size)))
+            cmd.append("-A {0}".format(packet_size))
         if command_terminator:
             cmd.append("-c {0}".format(shlex_quote(command_terminator)))
         if login_db:
@@ -256,7 +260,7 @@ def main():
         if editor:
             cmd.append("-E {0}".format(shlex_quote(editor)))
         if header:
-            cmd.append("-h {0}".format(shlex_quote(header)))
+            cmd.append("-h {0}".format(header))
         if hostname:
             cmd.append("-H {0}".format(shlex_quote(hostname)))
         if input_file:
@@ -268,7 +272,7 @@ def main():
         if keytab_file:
             cmd.append("-K {0}".format(shlex_quote(keytab_file)))
         if login_timeout:
-            cmd.append("-l {0}".format(shlex_quote(login_timeout)))
+            cmd.append("-l {0}".format(login_timeout))
         if error_message:
             cmd.append("-m {0}".format(shlex_quote(error_message)))
         if label:
@@ -284,7 +288,7 @@ def main():
         if login_server:
             cmd.append("-S {0}".format(shlex_quote(login_server)))
         if connect_timeout:
-            cmd.append("-t {0}".format(shlex_quote(connect_timeout)))
+            cmd.append("-t {0}".format(connect_timeout))
         if login_user:
             cmd.append("-U {0}".format(shlex_quote(login_user)))
         if data_confidentiality:
@@ -312,7 +316,7 @@ def main():
         if trusted_txt_file:
             cmd.append("-x {0}".format(shlex_quote(trusted_txt_file)))
         if retserverror:
-            cmd.append("--retservererror")
+            cmd.append("--retserverror")
         if conceal:
             cmd.append("--conceal {0}".format(shlex_quote(conceal)))
         if command_encryption:
@@ -320,9 +324,9 @@ def main():
         if appname:
             cmd.append("--appname {0}".format(shlex_quote(appname)))
         if filemode:
-            cmd.append("--filemode {0}".format(shlex_quote(filemode)))
+            cmd.append("--filemode {0}".format(filemode))
         if history:
-            cmd.append("--history {0}".format(shlex_quote(history)))
+            cmd.append("--history {0}".format(history))
 
     # Execute command
     cmd = ' '.join(cmd)
@@ -331,7 +335,7 @@ def main():
     
     if return_code != 0:
         module.fail_json(msg="{0}".format(stderr))
-    module.exit_json(changed=True, msg=stdout,
+    module.exit_json(changed=True, msg=stdout.replace('\t','  '),
                          executed_commands=executed_commands)
 
 
