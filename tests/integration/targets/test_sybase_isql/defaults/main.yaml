@@ -8,7 +8,7 @@ sybase:
     SYBASE: /opt/sybase
     SYBASE_OCS: OCS-16_0
   database:
-    name: fk_shell
+    name: fk_isql
     user: user1
     password: test1234
     size: 50m

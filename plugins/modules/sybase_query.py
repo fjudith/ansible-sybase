@@ -127,15 +127,15 @@ sybase_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is requi
 # ===============================================
 def sybase_common_argument_spec():
     return dict(
-        login_user=dict(type='str', default=None),
-        login_password=dict(type='str', no_log=True),
-        login_host=dict(type='str', default='localhost'),
-        login_port=dict(type='int', default=5000),
+        login_user=dict(type='str', default=None, aliases=['user', 'username']),
+        login_password=dict(type='str', no_log=True, aliases=['pass', 'password']),
+        login_host=dict(type='str', default='localhost', aliases=['host', 'hostname']),
+        login_port=dict(type='int', default=5000, aliases=['port']),
         odbc_driver=dict(type='str', default='FreeTDS'),
         connect_timeout=dict(type='int', default=30),
         encoding=dict(type='str', default='utf-16le'),
         query=dict(type='raw', required=True),
-        login_db=dict(type='str'),
+        login_db=dict(type='str', default=None, aliases=['db', 'database']),
         positional_args=dict(type='list'),
         named_args=dict(type='dict'),
         single_transaction=dict(type='bool', default=False),

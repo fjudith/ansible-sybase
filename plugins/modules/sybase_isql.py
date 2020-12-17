@@ -71,7 +71,7 @@ args, unknown = parser.parse_known_args()
 
 # ===============================================
 # Ansible support arguments.
-# ref: https://github.com/mkleehammer/pyodbc/wiki/The-pyodbc-Module
+# Ref: https://help.sap.com/viewer/da6c1d172bef4597a78dc5e81a9bb947/16.0.2.9/en-US/a7f55bd0bc2b1014a288bf54a6a7c877.html
 # ===============================================
 def sybase_common_argument_spec():
     return dict(
@@ -88,10 +88,10 @@ def sybase_common_argument_spec():
         charset=dict(type='str', default=args.charset),
         packet_size=dict(type='int', default=args.packet_size),
         command_terminator=dict(type='str', default=args.command_terminator),
-        login_db=dict(type='str', default=args.database),
+        login_db=dict(type='str', default=args.database, aliases=['db', 'database']),
         editor=dict(type='str', default=args.editor),
         header=dict(type='int', default=args.header),
-        hostname=dict(type='str', default=args.hostname),
+        login_host=dict(type='str', default=args.hostname, aliases=['host', 'hostname']),
         input_file=dict(type='str', default=args.input_file),
         interfaces_file=dict(type='str', default=args.interfaces_file),
         client_charset=dict(type='str', default=args.client_charset),
@@ -100,12 +100,12 @@ def sybase_common_argument_spec():
         error_message=dict(type='str', default=args.error_message),
         label=dict(type='str', default=args.label),
         output_file=dict(type='str', default=args.output_file),
-        login_password=dict(type='str', no_log=args.password),
+        login_password=dict(type='str', no_log=args.password, aliases=['pass', 'password']),
         remote_server_principal=dict(type='str', default=args.remote_server_principal),
         column_separator=dict(type='str', default=args.column_separator),
-        login_server=dict(type='str', default=args.server),
+        login_server=dict(type='str', default=args.server, aliases=['server']),
         connect_timeout=dict(type='int', default=args.timeout),
-        login_user=dict(type='str', default=args.username),
+        login_user=dict(type='str', default=args.username, aliases=['user', 'username']),
         data_confidentiality=dict(type='bool', default=args.data_confidentiality),
         data_integrity=dict(type='bool', default=args.data_integrity),
         mutual_authentication=dict(type='bool', default=args.mutual_authentication),
@@ -157,7 +157,7 @@ def main():
     login_db = module.params['login_db']
     editor = module.params['editor']
     header = module.params['header']
-    hostname = module.params['hostname']
+    hostname = module.params['login_host']
     input_file = module.params['input_file']
     interfaces_file = module.params['interfaces_file']
     client_charset = module.params['client_charset']

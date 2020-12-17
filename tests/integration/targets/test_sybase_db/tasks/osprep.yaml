@@ -1,0 +1,9 @@
+- name: Setup virtualenv with required modules
+  pip:
+    name:
+      - pyodbc
+      - sqlalchemy
+      - pymssql
+      - pandas
+    virtualenv: /tmp/venv/sybase_db
+    virtualenv_python: python3.6

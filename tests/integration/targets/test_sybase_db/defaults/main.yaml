@@ -1,0 +1,14 @@
+sybase:
+  user: sa
+  password: myPassword
+  host: sybase
+  server: MYSYBASE
+  port: 5000
+  environment:
+    SYBASE: /opt/sybase
+    SYBASE_OCS: OCS-16_0
+  database:
+    name: fakenames
+    user: fk_user
+    password: test1234
+    size: 50m

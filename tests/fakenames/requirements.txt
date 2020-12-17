@@ -1,4 +1,0 @@
-pyodbc
-sqlalchemy
-pymssql
-pandas

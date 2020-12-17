@@ -5,7 +5,7 @@ go
 if not exists (
     select 1
     from sysdatabases
-    where name = 'fk_shell'
+    where name = '{{ sybase.database.name }}'
 )
 create database {{ sybase.database.name }} on master = '{{ sybase.database.size }}'
 go
