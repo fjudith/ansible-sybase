@@ -1,6 +1,6 @@
 # Ansible-Sybase
 
-[![Plugins CI](https://github.com/fjudith/ansible-sybase/workflows/Plugins%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Plugins+CI") [![Roles CI](https://github.com/fjudith/ansible-sybase/workflows/Roles%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Roles+CI") [![Codecov](https://img.shields.io/codecov/c/github/fjudith/ansible-sybase)](https://codecov.io/gh/fjudith/ansible-sybase)
+[![Plugins CI](https://github.com/fjudith/ansible-sybase/workflows/Plugins%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Plugins+CI") [![Roles CI](https://github.com/fjudith/ansible-sybase/actions/workflows/ansible-test-roles.yaml/badge.svg)](https://github.com/fjudith/ansible-sybase/actions/workflows/ansible-test-roles.yaml) [![Codecov](https://img.shields.io/codecov/c/github/fjudith/ansible-sybase)](https://codecov.io/gh/fjudith/ansible-sybase)
 
 ## Included content
 
