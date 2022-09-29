@@ -29,3 +29,14 @@ Wait for Sybase master database initialization
 Run Ansible tests
 ...
 ```
+
+## Teardown
+
+While the `ansible-test` container is ephemeral, the database server is not.
+It is therefore to delete the `sybase` container manually.
+
+* Run the following command to kill and remove the `sybase` container.
+
+```bash
+dokcer container rm -f sybase
+```

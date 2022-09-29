@@ -5,10 +5,11 @@ sybase:
   server: MYSYBASE
   port: 5000
   client:
-    env_file: /opt/sybase/SYBASE.env
+    env_command: /opt/sybase/SYBASE.sh
     isql_command: /opt/sybase/OCS-16_0/bin/isql64
     bcp_command: /opt/sybase/OCS-16_0/bin/bcp64
   database:
     name: fk_shell
     user: user1
     password: test1234
+    size: 50m

@@ -1,0 +1,14 @@
+- name: DB & bcp | OS preparation
+  import_tasks: osprep.yaml
+
+- name: DB & bcp | Sybase configuration scripts
+  import_tasks: config.yaml
+
+- name: DB & bcp | Fakenames dataset and import script
+  import_tasks: dataset.yaml
+
+- name: DB & bcp | Sybase execute scripts
+  import_tasks: install.yaml
+
+- name: DB & bcp | Sybase drop database
+  import_tasks: teardown.yaml

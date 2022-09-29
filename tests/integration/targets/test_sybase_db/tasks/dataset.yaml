@@ -1,0 +1,17 @@
+- name: "Copy Fakenames dataset"
+  copy:
+    src: 10k_fakenames_fra.csv
+    dest: /tmp/10k_fakenames_fra.csv
+    mode: 0644
+
+- name: "Copy Fakenames import script (use csv module)"
+  copy:
+    src: import_csv.py
+    dest: /tmp/import_csv.py
+    mode: 0755
+
+- name: "Copy Fakenames import script (use pandas module)"
+  copy:
+    src: import_pandas.py
+    dest: /tmp/import_pandas.py
+    mode: 0755

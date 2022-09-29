@@ -1,0 +1,44 @@
+- vars:
+    sybase_parameters: &sybase_params
+      login_user: '{{ sybase.user }}'
+      login_password: '{{ sybase.password }}'
+      login_server: '{{ sybase.server }}'
+  
+  block:
+
+  - name: Create database
+    sybase_isql:
+      <<: *sybase_params
+      login_db: master
+      input_file: /tmp/database.sql
+    environment:
+      SYBASE: /opt/sybase
+      SYBASE_OCS: OCS-16_0
+
+  - name: Create user
+    sybase_isql:
+      <<: *sybase_params
+      input_file: "/tmp/user.sql"
+    environment:
+      SYBASE: /opt/sybase
+      SYBASE_OCS: OCS-16_0
+
+  - name: Create permissions
+    sybase_isql:
+      <<: *sybase_params
+      login_db: '{{ sybase.database.name }}'
+      input_file: /tmp/permissions.sql
+    environment:
+      SYBASE: /opt/sybase
+      SYBASE_OCS: OCS-16_0
+
+  - name: Create table
+    sybase_isql:
+      login_user: '{{ sybase.database.user }}'
+      login_password: '{{ sybase.database.password }}'
+      login_server: '{{ sybase.server }}'
+      login_db: '{{ sybase.database.name }}'
+      input_file: "/tmp/table.sql"
+    environment:
+      SYBASE: /opt/sybase
+      SYBASE_OCS: OCS-16_0

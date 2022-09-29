@@ -3,19 +3,20 @@
 [![Plugins CI](https://github.com/fjudith/ansible-sybase/workflows/Plugins%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Plugins+CI") [![Roles CI](https://github.com/fjudith/ansible-sybase/workflows/Roles%20CI/badge.svg?event=push)](https://github.com/fjudith/ansible-sybase/actions?query=workflow%3A"Roles+CI") [![Codecov](https://img.shields.io/codecov/c/github/fjudith/ansible-sybase)](https://codecov.io/gh/fjudith/ansible-sybase)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase?ref=badge_shield)
 
+
 ## Included content
 
 - **Modules**:
-  - [sybase_user](./plugins/modules)
-  - [sybase_db](./plugins/modules)
-  - [sybase_query](./plugins/modules)
+  - [sybase_db](./plugins/modules): Database import/export using `bcp` wrapper, and removal/simple creation using `pyodbc` and `FreeTDS` python drivers.
+  - [sybase_isql](./plugins/modules): Run SQL scripts using `isql64` or `isql` command wrapper.
+  - [sybase_query](./plugins/modules): Run SQL queries using `pyodbc` and `FreeTDS` python drivers.
 
 - **Roles**:
-  - [sybase-ase](./roles/sybase-ase)
-  - [sybase-ocs](./roles/sybase-ocs)
-  - [liquidbase](./roles/liquidbase)
-  - [openjdk-8](./role/openjdk-8)
-  - [common-firewall (vagrant only)](./roles/common-firewall)
+  - [sybase-ase](./roles/sybase-ase): Install SAP Adaptive Server Enterprise (ASE / Sybase) server
+  - [sybase-ocs](./roles/sybase-ocs): Install SAP OpenClient (OCS) client
+  - [liquidbase](./roles/liquidbase): Install Liquidbase database development tool
+  - [openjdk-8](./role/openjdk-8): Install AdoptOpenJDK 8 (required for `roles/liquidbase`)
+  - [common-firewall (vagrant only)](./roles/common-firewall): Manage firewalld (Required for `roles\sybase-ase`)
 
 ## Cloning
 
@@ -29,8 +30,8 @@ git clone "https://github.com/fjudith/ansible-sybase" sybase
 
 ## Tested with Ansible
 
-- 2.9.x
-- 2.10.x
+- 2.9.x: Centos 7, Ubuntu Bionic (18.04 LTS), Ubuntu Focal (20.04 LTS)
+- 2.10.x: : Centos 7, Ubuntu Bionic (18.04 LTS), Ubuntu Focal (20.04 LTS)
 
 ## Roadmap
 
@@ -49,7 +50,9 @@ Please refer to the [ROADMAP](./ROADMAP.md) for more details on the progress.
 * [Ansible-Lint](https://github.com/ansible/ansible-lint): Code style compliance processor
 * [Bash](https://fr.wikipedia.org/wiki/Bourne-Again_shell): Language used for general shell scripting
 * [Python](https://python.org): Language used to write unit tests and Ansible modules
-* [Powershell Core](https://github.com/powershell/powershell): Language used for Windows specific shell scripting
+* [PyODBC](https://github.com/mkleehammer/pyodbc/wiki): Open source Python module that makes accessing ODBC databases simple
+* [Powershell Core](https://github.com/powershell/powershell): Language used for Windows specific shell scripting (ref. [hack](./hack))
 
 ## License
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffjudith%2Fansible-sybase?ref=badge_large)

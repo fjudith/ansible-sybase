@@ -95,6 +95,7 @@ row_count:
 '''
 
 import os
+from datetime import datetime
 
 from ansible.module_utils.six.moves import configparser
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
@@ -126,15 +127,15 @@ sybase_driver_fail_msg = 'The PyODBC (Python 2.7 and Python 3.X) module is requi
 # ===============================================
 def sybase_common_argument_spec():
     return dict(
-        login_user=dict(type='str', default=None),
-        login_password=dict(type='str', no_log=True),
-        login_host=dict(type='str', default='localhost'),
-        login_port=dict(type='int', default=5000),
+        login_user=dict(type='str', default=None, aliases=['user', 'username']),
+        login_password=dict(type='str', no_log=True, aliases=['pass', 'password']),
+        login_host=dict(type='str', default='localhost', aliases=['host', 'hostname']),
+        login_port=dict(type='int', default=5000, aliases=['port']),
         odbc_driver=dict(type='str', default='FreeTDS'),
         connect_timeout=dict(type='int', default=30),
         encoding=dict(type='str', default='utf-16le'),
         query=dict(type='raw', required=True),
-        login_db=dict(type='str'),
+        login_db=dict(type='str', default=None, aliases=['db', 'database']),
         positional_args=dict(type='list'),
         named_args=dict(type='dict'),
         single_transaction=dict(type='bool', default=False),
@@ -163,6 +164,9 @@ def main():
     connect_timeout = module.params['connect_timeout']
     encoding        = module.params["encoding"]
     query           = module.params["query"]
+
+    changed = False
+    started = datetime.now()
 
     # Check query format
     if not isinstance(query, (str, list)):
@@ -214,7 +218,7 @@ def main():
     # Execute query:
     # Set defaults:
     result = dict(
-        changed=False,
+        changed=changed,
         description=[],
         row_count=-1,
         results=[],
@@ -280,6 +284,13 @@ def main():
     # When the module run with the single_transaction == True:
     if not autocommit:
         db_connection.commit()
+
+    finished = datetime.now()
+    difference = (finished - started)
+
+    result['start'] = str(started)
+    result['end'] = str(finished)
+    result['duration'] = str(difference)
 
     # Exit:
     module.exit_json(**result)

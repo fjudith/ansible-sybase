@@ -16,40 +16,43 @@
 
 - name: Create database
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
-    '{{ sybase.client.isql_command }}' \
-    -U '{{ sybase.user }}' \
-    -P '{{ sybase.password }}' \
-    -S '{{ sybase.server }}' \
-    -D master \
+    source {{ sybase.client.env_command }} &&
+    '{{ sybase.client.isql_command }}'
+    -U '{{ sybase.user }}'
+    -P '{{ sybase.password }}'
+    -S '{{ sybase.server }}'
+    -D master
+    --retserverror
     -i"/tmp/database.sql"
 
 - name: Create user
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
-    -D master
+    --retserverror
     -i"/tmp/user.sql"
 
 - name: Create permissions
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.user }}'
     -P '{{ sybase.password }}'
     -S '{{ sybase.server }}'
-    -D master
-    -i"/tmp/user.sql"
+    -D '{{ sybase.database.name }}'
+    --retserverror
+    -i"/tmp/permissions.sql"
 
 - name: Create table
   shell: >-
-    source /opt/sybase/SYBASE.sh &&
+    source {{ sybase.client.env_command }} &&
     '{{ sybase.client.isql_command }}'
     -U '{{ sybase.database.user }}'
     -P '{{ sybase.database.password }}'
     -S '{{ sybase.server }}'
     -D '{{ sybase.database.name }}'
+    --retserverror
     -i"/tmp/table.sql"

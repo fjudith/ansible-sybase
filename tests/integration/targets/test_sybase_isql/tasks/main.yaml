@@ -1,0 +1,8 @@
+- name: Isql | Sybase configuration scripts
+  import_tasks: config.yaml
+
+- name: Isql | Sybase execute scripts
+  import_tasks: install.yaml
+
+- name: Isql | Sybase drop database
+  import_tasks: teardown.yaml

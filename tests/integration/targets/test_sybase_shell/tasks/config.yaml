@@ -11,8 +11,8 @@
     mode: 0644
 
 - name: "User script"
-  copy:
-    src: user.sql
+  template:
+    src: user.sql.j2
     dest: /tmp/user.sql
     mode: 0644
 
